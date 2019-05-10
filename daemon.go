@@ -38,6 +38,18 @@ type BlockCount struct {
 	Status string `json:"status"`
 }
 
+type BlockTemplate struct {
+	BlockTemplateBlob string `json:"blocktemplate_blob"`
+	BlockHashingBlob  string `json:"blockhashing_blob"`
+	Difficulty        uint   `json:"difficulty"`
+	ExpectedReward    uint   `json:"expected_reward"`
+	Height            uint   `json:"height"`
+	PrevHash          string `json:"prev_hash"`
+	ReservedOffset    uint   `json:"reserved_offset"`
+	Status            string `json:"status"`
+	Untrusted         bool   `json:"untrusted"`
+}
+
 func NewDaemonClient(endpoint string, username string, password string) *DaemonClient {
 	return &DaemonClient{endpoint: endpoint, username: username, password: password}
 }
@@ -96,4 +108,18 @@ func (dc *DaemonClient) OnGetBlockHash(blockHeight int) (string, error) {
 	err := dc.jsonRPCRequest("on_get_block_hash", []int{blockHeight}, &blockHash)
 
 	return blockHash, err
+}
+
+func (dc *DaemonClient) GetBlockTemplate(walletAddress string, reserveSize uint) (BlockTemplate, error) {
+	var blockTemplate BlockTemplate
+
+	type jsonRPCParams struct {
+		WalletAddress string `json:"wallet_address"`
+		ReserveSize   uint   `json:"reserve_size"`
+	}
+
+	params := jsonRPCParams{WalletAddress: walletAddress, ReserveSize: reserveSize}
+	err := dc.jsonRPCRequest("get_block_template", params, &blockTemplate)
+
+	return blockTemplate, err
 }
