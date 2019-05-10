@@ -50,6 +50,28 @@ type BlockTemplate struct {
 	Untrusted         bool   `json:"untrusted"`
 }
 
+type BlockHeader struct {
+	BlockSize    uint   `json:"block_size"`
+	Depth        uint   `json:"depth"`
+	Difficulty   uint   `json:"difficulty"`
+	Hash         string `json:"hash"`
+	Height       uint   `json:"height"`
+	MajorVersion uint   `json:"major_version"`
+	MinorVersion uint   `json:"minor_version"`
+	Nonce        uint   `json:"nonce"`
+	NumTxes      uint   `json:"num_txes"`
+	OrphanStatus bool   `json:"orphan_status"`
+	PrevHash     string `json:"prev_hash"`
+	Reward       uint   `json:"reward"`
+	Timestamp    uint   `json:"timestamp"`
+}
+
+type BlockHeaderResponse struct {
+	BlockHeader BlockHeader `json:"block_header"`
+	Status      string      `json:"status"`
+	Untrusted   bool        `json:"untrusted"`
+}
+
 func NewDaemonClient(endpoint string, username string, password string) *DaemonClient {
 	return &DaemonClient{endpoint: endpoint, username: username, password: password}
 }
@@ -129,4 +151,11 @@ func (dc *DaemonClient) SubmitBlock(blockBlobData string) (string, error) {
 	err := dc.jsonRPCRequest("submit_block", blockBlobData, &status)
 
 	return status, err
+}
+
+func (dc *DaemonClient) GetLastBlockHeader() (BlockHeaderResponse, error) {
+	var blockHeaderResponse BlockHeaderResponse
+	err := dc.jsonRPCRequest("get_last_block_header", nil, &blockHeaderResponse)
+
+	return blockHeaderResponse, err
 }
