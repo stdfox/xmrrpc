@@ -33,6 +33,11 @@ type jsonRPCError struct {
 	Message string `json:"message"`
 }
 
+type BlockCount struct {
+	Count  uint   `json:"count"`
+	Status string `json:"status"`
+}
+
 func NewDaemonClient(endpoint string, username string, password string) *DaemonClient {
 	return &DaemonClient{endpoint: endpoint, username: username, password: password}
 }
@@ -77,4 +82,14 @@ func (dc *DaemonClient) jsonRPCRequest(method string, params interface{}, reply 
 	}
 
 	return json.Unmarshal(*jsonRPCResponse.Result, reply)
+}
+
+func (dc *DaemonClient) GetBlockCount() (BlockCount, error) {
+	var blockCount BlockCount
+
+	if err := dc.jsonRPCRequest("getblockcount", nil, &blockCount); err != nil {
+		return blockCount, err
+	}
+
+	return blockCount, nil
 }
