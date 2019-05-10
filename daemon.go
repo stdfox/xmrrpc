@@ -33,12 +33,12 @@ type jsonRPCError struct {
 	Message string `json:"message"`
 }
 
-type BlockCount struct {
+type BlockCountResponse struct {
 	Count  uint   `json:"count"`
 	Status string `json:"status"`
 }
 
-type BlockTemplate struct {
+type BlockTemplateResponse struct {
 	BlockTemplateBlob string `json:"blocktemplate_blob"`
 	BlockHashingBlob  string `json:"blockhashing_blob"`
 	Difficulty        uint   `json:"difficulty"`
@@ -124,11 +124,11 @@ func (dc *DaemonClient) jsonRPCRequest(method string, params interface{}, reply 
 	return json.Unmarshal(*jsonRPCResponse.Result, reply)
 }
 
-func (dc *DaemonClient) GetBlockCount() (BlockCount, error) {
-	var blockCount BlockCount
-	err := dc.jsonRPCRequest("get_block_count", nil, &blockCount)
+func (dc *DaemonClient) GetBlockCount() (BlockCountResponse, error) {
+	var blockCountResponse BlockCountResponse
+	err := dc.jsonRPCRequest("get_block_count", nil, &blockCountResponse)
 
-	return blockCount, err
+	return blockCountResponse, err
 }
 
 func (dc *DaemonClient) OnGetBlockHash(blockHeight int) (string, error) {
@@ -138,8 +138,8 @@ func (dc *DaemonClient) OnGetBlockHash(blockHeight int) (string, error) {
 	return blockHash, err
 }
 
-func (dc *DaemonClient) GetBlockTemplate(walletAddress string, reserveSize uint) (BlockTemplate, error) {
-	var blockTemplate BlockTemplate
+func (dc *DaemonClient) GetBlockTemplate(walletAddress string, reserveSize uint) (BlockTemplateResponse, error) {
+	var blockTemplateResponse BlockTemplateResponse
 
 	type jsonRPCParams struct {
 		WalletAddress string `json:"wallet_address"`
@@ -147,9 +147,9 @@ func (dc *DaemonClient) GetBlockTemplate(walletAddress string, reserveSize uint)
 	}
 
 	params := jsonRPCParams{WalletAddress: walletAddress, ReserveSize: reserveSize}
-	err := dc.jsonRPCRequest("get_block_template", params, &blockTemplate)
+	err := dc.jsonRPCRequest("get_block_template", params, &blockTemplateResponse)
 
-	return blockTemplate, err
+	return blockTemplateResponse, err
 }
 
 func (dc *DaemonClient) SubmitBlock(blockBlobData string) (string, error) {
