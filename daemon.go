@@ -86,14 +86,14 @@ func (dc *DaemonClient) jsonRPCRequest(method string, params interface{}, reply 
 
 func (dc *DaemonClient) GetBlockCount() (BlockCount, error) {
 	var blockCount BlockCount
-	err := dc.jsonRPCRequest("getblockcount", nil, &blockCount)
+	err := dc.jsonRPCRequest("get_block_count", nil, &blockCount)
 
 	return blockCount, err
 }
 
 func (dc *DaemonClient) OnGetBlockHash(blockHeight int) (string, error) {
 	var blockHash string
-	err := dc.jsonRPCRequest("on_getblockhash", []int{blockHeight}, &blockHash)
+	err := dc.jsonRPCRequest("on_get_block_hash", []int{blockHeight}, &blockHash)
 
 	return blockHash, err
 }
