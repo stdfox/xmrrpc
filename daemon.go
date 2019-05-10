@@ -159,3 +159,16 @@ func (dc *DaemonClient) GetLastBlockHeader() (BlockHeaderResponse, error) {
 
 	return blockHeaderResponse, err
 }
+
+func (dc *DaemonClient) GetBlockHeaderByHash(hash string) (BlockHeaderResponse, error) {
+	var blockHeaderResponse BlockHeaderResponse
+
+	type jsonRPCParams struct {
+		Hash string `json:"hash"`
+	}
+
+	params := jsonRPCParams{Hash: hash}
+	err := dc.jsonRPCRequest("get_block_header_by_hash", params, &blockHeaderResponse)
+
+	return blockHeaderResponse, err
+}
