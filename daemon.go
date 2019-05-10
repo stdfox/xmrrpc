@@ -172,3 +172,16 @@ func (dc *DaemonClient) GetBlockHeaderByHash(hash string) (BlockHeaderResponse, 
 
 	return blockHeaderResponse, err
 }
+
+func (dc *DaemonClient) GetBlockHeaderByHeight(height uint) (BlockHeaderResponse, error) {
+	var blockHeaderResponse BlockHeaderResponse
+
+	type jsonRPCParams struct {
+		Height uint `json:"height"`
+	}
+
+	params := jsonRPCParams{Height: height}
+	err := dc.jsonRPCRequest("get_block_header_by_height", params, &blockHeaderResponse)
+
+	return blockHeaderResponse, err
+}
