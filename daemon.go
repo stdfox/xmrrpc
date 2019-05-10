@@ -93,3 +93,13 @@ func (dc *DaemonClient) GetBlockCount() (BlockCount, error) {
 
 	return blockCount, nil
 }
+
+func (dc *DaemonClient) OnGetBlockHash(blockHeight int) (string, error) {
+	var blockHash string
+
+	if err := dc.jsonRPCRequest("on_getblockhash", []int{blockHeight}, &blockHash); err != nil {
+		return blockHash, err
+	}
+
+	return blockHash, nil
+}
