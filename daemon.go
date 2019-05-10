@@ -72,6 +72,12 @@ type BlockHeaderResponse struct {
 	Untrusted   bool        `json:"untrusted"`
 }
 
+type BlockHeadersResponse struct {
+	BlockHeader []BlockHeader `json:"headers"`
+	Status      string        `json:"status"`
+	Untrusted   bool          `json:"untrusted"`
+}
+
 func NewDaemonClient(endpoint string, username string, password string) *DaemonClient {
 	return &DaemonClient{endpoint: endpoint, username: username, password: password}
 }
@@ -184,4 +190,18 @@ func (dc *DaemonClient) GetBlockHeaderByHeight(height uint) (BlockHeaderResponse
 	err := dc.jsonRPCRequest("get_block_header_by_height", params, &blockHeaderResponse)
 
 	return blockHeaderResponse, err
+}
+
+func (dc *DaemonClient) GetBlockHeadersRange(start_height uint, end_height uint) (BlockHeadersResponse, error) {
+	var blockHeadersResponse BlockHeadersResponse
+
+	type jsonRPCParams struct {
+		StartHeight uint `json:"start_height"`
+		EndHeight   uint `json:"end_height"`
+	}
+
+	params := jsonRPCParams{StartHeight: start_height, EndHeight: end_height}
+	err := dc.jsonRPCRequest("get_block_headers_range", params, &blockHeadersResponse)
+
+	return blockHeadersResponse, err
 }
