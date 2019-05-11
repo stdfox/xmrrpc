@@ -192,6 +192,12 @@ type VersionResponse struct {
 	Untrusted bool   `json:"untrusted"`
 }
 
+type CoinbaseTxSumResponse struct {
+	EmissionAmount uint   `json:"emission_amount"`
+	FeeAmount      uint   `json:"fee_amount"`
+	Status         string `json:"status"`
+}
+
 func NewDaemonClient(endpoint string, username string, password string) *DaemonClient {
 	return &DaemonClient{endpoint: endpoint, username: username, password: password}
 }
@@ -410,4 +416,18 @@ func (dc *DaemonClient) GetVersion() (VersionResponse, error) {
 	err := dc.jsonRPCRequest("get_version", nil, &versionResponse)
 
 	return versionResponse, err
+}
+
+func (dc *DaemonClient) GetCoinbaseTxSum(height uint, count uint) (CoinbaseTxSumResponse, error) {
+	var coinbaseTxSum CoinbaseTxSumResponse
+
+	type jsonRPCParams struct {
+		Height uint `json:"height"`
+		Count  uint `json:"count"`
+	}
+
+	params := jsonRPCParams{Height: height, Count: count}
+	err := dc.jsonRPCRequest("get_coinbase_tx_sum", params, &coinbaseTxSum)
+
+	return coinbaseTxSum, err
 }
