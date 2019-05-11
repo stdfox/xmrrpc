@@ -186,6 +186,12 @@ type OutputHistogramResponse struct {
 	Untrusted bool        `json:"untrusted"`
 }
 
+type VersionResponse struct {
+	Version   uint   `json:"version"`
+	Status    string `json:"status"`
+	Untrusted bool   `json:"untrusted"`
+}
+
 func NewDaemonClient(endpoint string, username string, password string) *DaemonClient {
 	return &DaemonClient{endpoint: endpoint, username: username, password: password}
 }
@@ -397,4 +403,11 @@ func (dc *DaemonClient) GetOutputHistogram(amounts []uint, minCount uint, maxCou
 	err := dc.jsonRPCRequest("get_output_histogram", params, &outputHistogramResponse)
 
 	return outputHistogramResponse, err
+}
+
+func (dc *DaemonClient) GetVersion() (VersionResponse, error) {
+	var versionResponse VersionResponse
+	err := dc.jsonRPCRequest("get_version", nil, &versionResponse)
+
+	return versionResponse, err
 }
