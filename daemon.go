@@ -355,3 +355,16 @@ func (dc *DaemonClient) GetBans() (BansResponse, error) {
 
 	return bansResponse, err
 }
+
+func (dc *DaemonClient) FlushTxpool(txids []string) (StatusResponse, error) {
+	var statusResponse StatusResponse
+
+	type jsonRPCParams struct {
+		TxIDs []string `json:"txids"`
+	}
+
+	params := jsonRPCParams{TxIDs: txids}
+	err := dc.jsonRPCRequest("flush_txpool", params, &statusResponse)
+
+	return statusResponse, err
+}
