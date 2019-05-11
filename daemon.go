@@ -469,3 +469,16 @@ func (dc *DaemonClient) GetAlternateChains() (AlternateChainsResponse, error) {
 
 	return alternateChainsResponse, err
 }
+
+func (dc *DaemonClient) RelayTx(txids []string) (StatusResponse, error) {
+	var statusResponse StatusResponse
+
+	type jsonRPCParams struct {
+		TxIDs []string `json:"txids"`
+	}
+
+	params := jsonRPCParams{TxIDs: txids}
+	err := dc.jsonRPCRequest("relay_tx", params, &statusResponse)
+
+	return statusResponse, err
+}
