@@ -29,6 +29,7 @@ Current API version: network height of 1,562,465.
 - get_alternate_chains
 - relay_tx
 - sync_info
+- get_txpool_backlog
 
 ## License
 [MIT License](https://github.com/stdfox/xmrrpc/blob/master/LICENSE.md)

@@ -238,6 +238,12 @@ type SyncInfoResponse struct {
 	TargetHeight uint   `json:"target_height"`
 }
 
+type TxpoolBacklogResponse struct {
+	Backlog   []byte `json:"backlog"`
+	Status    string `json:"status"`
+	Untrusted bool   `json:"untrusted"`
+}
+
 func NewDaemonClient(endpoint string, username string, password string) *DaemonClient {
 	return &DaemonClient{endpoint: endpoint, username: username, password: password}
 }
@@ -510,4 +516,11 @@ func (dc *DaemonClient) SyncInfo() (SyncInfoResponse, error) {
 	err := dc.jsonRPCRequest("sync_info", nil, &syncInfoResponse)
 
 	return syncInfoResponse, err
+}
+
+func (dc *DaemonClient) GetTxpoolBacklog() (TxpoolBacklogResponse, error) {
+	var txpoolBacklogResponse TxpoolBacklogResponse
+	err := dc.jsonRPCRequest("get_txpool_backlog", nil, &txpoolBacklogResponse)
+
+	return txpoolBacklogResponse, err
 }
