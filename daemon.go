@@ -145,6 +145,18 @@ type InfoResponse struct {
 	WhitePeerlistSize        uint   `json:"white_peerlist_size"`
 }
 
+type HardForkInfoResponse struct {
+	EarliestHeight uint   `json:"earliest_height"`
+	Enabled        bool   `json:"enabled"`
+	State          uint   `json:"state"`
+	Status         string `json:"status"`
+	Threshold      uint   `json:"threshold"`
+	Version        uint   `json:"version"`
+	Votes          uint   `json:"votes"`
+	Voting         uint   `json:"voting"`
+	Window         uint   `json:"window"`
+}
+
 func NewDaemonClient(endpoint string, username string, password string) *DaemonClient {
 	return &DaemonClient{endpoint: endpoint, username: username, password: password}
 }
@@ -301,4 +313,11 @@ func (dc *DaemonClient) GetInfo() (InfoResponse, error) {
 	err := dc.jsonRPCRequest("get_info", nil, &infoResponse)
 
 	return infoResponse, err
+}
+
+func (dc *DaemonClient) HardForkInfo() (HardForkInfoResponse, error) {
+	var hardForkInfoResponse HardForkInfoResponse
+	err := dc.jsonRPCRequest("hard_fork_info", nil, &hardForkInfoResponse)
+
+	return hardForkInfoResponse, err
 }
