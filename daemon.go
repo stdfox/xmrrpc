@@ -301,7 +301,6 @@ func (dc *DaemonClient) GetBlock(height uint, hash string) (BlockResponse, error
 
 func (dc *DaemonClient) GetConnections() (ConnectionsResponse, error) {
 	var connectionsResponse ConnectionsResponse
-
 	err := dc.jsonRPCRequest("get_connections", nil, &connectionsResponse)
 
 	return connectionsResponse, err
@@ -309,7 +308,6 @@ func (dc *DaemonClient) GetConnections() (ConnectionsResponse, error) {
 
 func (dc *DaemonClient) GetInfo() (InfoResponse, error) {
 	var infoResponse InfoResponse
-
 	err := dc.jsonRPCRequest("get_info", nil, &infoResponse)
 
 	return infoResponse, err
