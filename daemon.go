@@ -115,6 +115,36 @@ type ConnectionsResponse struct {
 	Status      string       `json:"status"`
 }
 
+type InfoResponse struct {
+	AltBlocksCount           uint   `json:"alt_blocks_count"`
+	BlockSizeLimit           uint   `json:"block_size_limit"`
+	BlockSizeMedian          uint   `json:"block_size_median"`
+	BootstrapDaemonAddress   string `json:"bootstrap_daemon_address"`
+	CumulativeDifficulty     uint   `json:"cumulative_difficulty"`
+	Difficulty               uint   `json:"difficulty"`
+	FreeSpace                uint   `json:"free_space"`
+	GreyPeerlistSize         uint   `json:"grey_peerlist_size"`
+	Height                   uint   `json:"height"`
+	HeightWithoutBootstrap   uint   `json:"height_without_bootstrap"`
+	IncomingConnectionsCount uint   `json:"incoming_connections_count"`
+	Mainnet                  bool   `json:"mainnet"`
+	Offline                  bool   `json:"offline"`
+	OutgoingConnectionsCount uint   `json:"outgoing_connections_count"`
+	RPCConnectionsCount      uint   `json:"rpc_connections_count"`
+	Stagenet                 bool   `json:"stagenet"`
+	StartTime                uint   `json:"start_time"`
+	Status                   string `json:"status"`
+	Target                   uint   `json:"target"`
+	TargetHeight             uint   `json:"target_height"`
+	Testnet                  bool   `json:"testnet"`
+	TopBlockHash             string `json:"top_block_hash"`
+	TxCount                  uint   `json:"tx_count"`
+	TxPoolSize               uint   `json:"tx_pool_size"`
+	Untrusted                bool   `json:"untrusted"`
+	WasBootstrapEverUsed     bool   `json:"was_bootstrap_ever_used"`
+	WhitePeerlistSize        uint   `json:"white_peerlist_size"`
+}
+
 func NewDaemonClient(endpoint string, username string, password string) *DaemonClient {
 	return &DaemonClient{endpoint: endpoint, username: username, password: password}
 }
@@ -263,4 +293,12 @@ func (dc *DaemonClient) GetConnections() (ConnectionsResponse, error) {
 	err := dc.jsonRPCRequest("get_connections", nil, &connectionsResponse)
 
 	return connectionsResponse, err
+}
+
+func (dc *DaemonClient) GetInfo() (InfoResponse, error) {
+	var infoResponse InfoResponse
+
+	err := dc.jsonRPCRequest("get_info", nil, &infoResponse)
+
+	return infoResponse, err
 }
