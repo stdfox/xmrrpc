@@ -86,6 +86,35 @@ type Block struct {
 	Untrusted   bool        `json:"untrusted"`
 }
 
+type Connection struct {
+	Address         string `json:"address"`
+	AvgDownload     uint   `json:"avg_download"`
+	AvgUpload       uint   `json:"avg_upload"`
+	ConnectionID    string `json:"connection_id"`
+	CurrentDownload uint   `json:"current_download"`
+	CurrentUpload   uint   `json:"current_upload"`
+	Height          uint   `json:"height"`
+	Host            string `json:"host"`
+	Incoming        bool   `json:"incoming"`
+	IP              string `json:"ip"`
+	LiveTime        uint   `json:"live_time"`
+	LocalIP         bool   `json:"local_ip"`
+	Localhost       bool   `json:"localhost"`
+	PeerID          string `json:"peer_id"`
+	Port            string `json:"port"`
+	RecvCount       uint   `json:"recv_count"`
+	RecvIdleTime    uint   `json:"recv_idle_time"`
+	SendCount       uint   `json:"send_count"`
+	SendIdleTime    uint   `json:"send_idle_time"`
+	State           string `json:"state"`
+	SupportFlags    uint   `json:"support_flags"`
+}
+
+type ConnectionsResponse struct {
+	Connections []Connection `json:"connections"`
+	Status      string       `json:"status"`
+}
+
 func NewDaemonClient(endpoint string, username string, password string) *DaemonClient {
 	return &DaemonClient{endpoint: endpoint, username: username, password: password}
 }
@@ -226,4 +255,12 @@ func (dc *DaemonClient) GetBlock(height uint, hash string) (Block, error) {
 	err := dc.jsonRPCRequest("get_block", params, &block)
 
 	return block, err
+}
+
+func (dc *DaemonClient) GetConnections() (ConnectionsResponse, error) {
+	var connectionsResponse ConnectionsResponse
+
+	err := dc.jsonRPCRequest("get_connections", nil, &connectionsResponse)
+
+	return connectionsResponse, err
 }
