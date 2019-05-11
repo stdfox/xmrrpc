@@ -216,6 +216,28 @@ type AlternateChainsResponse struct {
 	Status string  `json:"status"`
 }
 
+type Peer struct {
+	Info Connection `json:"info"`
+}
+
+type Span struct {
+	ConnectionID     string `json:"connection_id"`
+	NBlocks          uint   `json:"nblocks"`
+	Rate             uint   `json:"rate"`
+	RemoteAddress    string `json:"remote_address"`
+	Size             uint   `json:"size"`
+	Speed            uint   `json:"speed"`
+	StartBlockHeight uint   `json:"start_block_height"`
+}
+
+type SyncInfoResponse struct {
+	Height       uint   `json:"height"`
+	Peers        []Peer `json:"peers"`
+	Spans        []Span `json:"spans"`
+	Status       string `json:"status"`
+	TargetHeight uint   `json:"target_height"`
+}
+
 func NewDaemonClient(endpoint string, username string, password string) *DaemonClient {
 	return &DaemonClient{endpoint: endpoint, username: username, password: password}
 }
@@ -481,4 +503,11 @@ func (dc *DaemonClient) RelayTx(txids []string) (StatusResponse, error) {
 	err := dc.jsonRPCRequest("relay_tx", params, &statusResponse)
 
 	return statusResponse, err
+}
+
+func (dc *DaemonClient) SyncInfo() (SyncInfoResponse, error) {
+	var syncInfoResponse SyncInfoResponse
+	err := dc.jsonRPCRequest("sync_info", nil, &syncInfoResponse)
+
+	return syncInfoResponse, err
 }
