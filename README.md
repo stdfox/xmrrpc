@@ -6,5 +6,16 @@ Full API Documentation can be found at https://web.getmonero.org/resources/devel
 
 Current API version: network height of 1,562,465.
 
+### JSON RPC Methods:
+- get_block_count
+- on_get_block_hash
+- get_block_template
+- submit_block
+- get_last_block_header
+- get_block_header_by_hash
+- get_block_header_by_height
+- get_block_headers_range
+- get_block
+
 ## License
 [MIT License](https://github.com/stdfox/xmrrpc/blob/master/LICENSE.md)
