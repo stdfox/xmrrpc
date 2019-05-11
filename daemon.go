@@ -33,6 +33,10 @@ type jsonRPCError struct {
 	Message string `json:"message"`
 }
 
+type StatusResponse struct {
+	Status string `json:"status"`
+}
+
 type BlockCountResponse struct {
 	Count  uint   `json:"count"`
 	Status string `json:"status"`
@@ -162,10 +166,6 @@ type Ban struct {
 	IP      uint   `json:"ip"`
 	Ban     bool   `json:"ban"`
 	Seconds uint   `json:"seconds"`
-}
-
-type SetBansResponse struct {
-	Status string `json:"status"`
 }
 
 type BansResponse struct {
@@ -336,17 +336,17 @@ func (dc *DaemonClient) HardForkInfo() (HardForkInfoResponse, error) {
 	return hardForkInfoResponse, err
 }
 
-func (dc *DaemonClient) SetBans(bans []Ban) (SetBansResponse, error) {
-	var setBansResponse SetBansResponse
+func (dc *DaemonClient) SetBans(bans []Ban) (StatusResponse, error) {
+	var statusResponse StatusResponse
 
 	type jsonRPCParams struct {
 		Bans []Ban `json:"bans"`
 	}
 
 	params := jsonRPCParams{Bans: bans}
-	err := dc.jsonRPCRequest("set_bans", params, &setBansResponse)
+	err := dc.jsonRPCRequest("set_bans", params, &statusResponse)
 
-	return setBansResponse, err
+	return statusResponse, err
 }
 
 func (dc *DaemonClient) GetBans() (BansResponse, error) {
