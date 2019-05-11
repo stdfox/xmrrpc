@@ -173,6 +173,19 @@ type BansResponse struct {
 	Status string `json:"status"`
 }
 
+type Histogram struct {
+	Amount            uint `json:"amount"`
+	TotalInstances    uint `json:"total_instances"`
+	UnlockedInstances uint `json:"unlocked_instances"`
+	RecentInstances   uint `json:"recent_instances"`
+}
+
+type OutputHistogramResponse struct {
+	Histogram []Histogram `json:"histogram"`
+	Status    string      `json:"status"`
+	Untrusted bool        `json:"untrusted"`
+}
+
 func NewDaemonClient(endpoint string, username string, password string) *DaemonClient {
 	return &DaemonClient{endpoint: endpoint, username: username, password: password}
 }
@@ -367,4 +380,21 @@ func (dc *DaemonClient) FlushTxpool(txids []string) (StatusResponse, error) {
 	err := dc.jsonRPCRequest("flush_txpool", params, &statusResponse)
 
 	return statusResponse, err
+}
+
+func (dc *DaemonClient) GetOutputHistogram(amounts []uint, minCount uint, maxCount uint, unlocked bool, recentCutoff uint) (OutputHistogramResponse, error) {
+	var outputHistogramResponse OutputHistogramResponse
+
+	type jsonRPCParams struct {
+		Amounts      []uint `json:"amounts"`
+		MinCount     uint   `json:"min_count"`
+		MaxCount     uint   `json:"max_count"`
+		Unlocked     bool   `json:"unlocked"`
+		RecentCutoff uint   `json:"recent_cutoff"`
+	}
+
+	params := jsonRPCParams{Amounts: amounts, MinCount: minCount, MaxCount: maxCount, Unlocked: unlocked, RecentCutoff: recentCutoff}
+	err := dc.jsonRPCRequest("get_output_histogram", params, &outputHistogramResponse)
+
+	return outputHistogramResponse, err
 }
