@@ -198,6 +198,12 @@ type CoinbaseTxSumResponse struct {
 	Status         string `json:"status"`
 }
 
+type FeeEstimateResponse struct {
+	Fee       uint   `json:"fee"`
+	Status    string `json:"status"`
+	Untrusted bool   `json:"untrusted"`
+}
+
 func NewDaemonClient(endpoint string, username string, password string) *DaemonClient {
 	return &DaemonClient{endpoint: endpoint, username: username, password: password}
 }
@@ -430,4 +436,17 @@ func (dc *DaemonClient) GetCoinbaseTxSum(height uint, count uint) (CoinbaseTxSum
 	err := dc.jsonRPCRequest("get_coinbase_tx_sum", params, &coinbaseTxSum)
 
 	return coinbaseTxSum, err
+}
+
+func (dc *DaemonClient) GetFeeEstimate(graceBlocks uint) (FeeEstimateResponse, error) {
+	var feeEstimateResponse FeeEstimateResponse
+
+	type jsonRPCParams struct {
+		GraceBlocks uint `json:"grace_blocks"`
+	}
+
+	params := jsonRPCParams{GraceBlocks: graceBlocks}
+	err := dc.jsonRPCRequest("get_fee_estimate", params, &feeEstimateResponse)
+
+	return feeEstimateResponse, err
 }

@@ -25,6 +25,7 @@ Current API version: network height of 1,562,465.
 - get_output_histogram
 - get_version
 - get_coinbase_tx_sum
+- get_fee_estimate
 
 ## License
 [MIT License](https://github.com/stdfox/xmrrpc/blob/master/LICENSE.md)
