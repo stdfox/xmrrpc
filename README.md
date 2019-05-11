@@ -30,6 +30,10 @@ Current API version: network height of 1,562,465.
 - relay_tx
 - sync_info
 - get_txpool_backlog
+- get_output_distribution
+
+## Know issues
+- get_output_distribution - bad server response (invalid character '\x00' in string literal)
 
 ## License
 [MIT License](https://github.com/stdfox/xmrrpc/blob/master/LICENSE.md)

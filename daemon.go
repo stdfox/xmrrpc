@@ -244,6 +244,20 @@ type TxpoolBacklogResponse struct {
 	Untrusted bool   `json:"untrusted"`
 }
 
+type Distribution struct {
+	Amount       uint   `json:"amount"`
+	Base         uint   `json:"base"`
+	Binary       bool   `json:"binary"`
+	Distribution []uint `json:"distribution"`
+	StartHeight  uint   `json:"start_height"`
+}
+
+type OutputDistributionResponse struct {
+	Distributions []Distribution `json:"distributions"`
+	Status        string         `json:"status"`
+	Untrusted     bool           `json:"untrusted"`
+}
+
 func NewDaemonClient(endpoint string, username string, password string) *DaemonClient {
 	return &DaemonClient{endpoint: endpoint, username: username, password: password}
 }
@@ -523,4 +537,20 @@ func (dc *DaemonClient) GetTxpoolBacklog() (TxpoolBacklogResponse, error) {
 	err := dc.jsonRPCRequest("get_txpool_backlog", nil, &txpoolBacklogResponse)
 
 	return txpoolBacklogResponse, err
+}
+
+func (dc *DaemonClient) GetOutputDistribution(amounts []uint, cumulative bool, fromHeight uint, toHeight uint) (OutputDistributionResponse, error) {
+	var outputDistributionResponse OutputDistributionResponse
+
+	type jsonRPCParams struct {
+		Amounts    []uint `json:"amounts"`
+		Cumulative bool   `json:"cumulative"`
+		FromHeight uint   `json:"from_height"`
+		ToHeight   uint   `json:"to_height"`
+	}
+
+	params := jsonRPCParams{Amounts: amounts, Cumulative: cumulative, FromHeight: fromHeight, ToHeight: toHeight}
+	err := dc.jsonRPCRequest("get_output_distribution", params, &outputDistributionResponse)
+
+	return outputDistributionResponse, err
 }
