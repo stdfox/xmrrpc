@@ -162,7 +162,7 @@ func (dc *DaemonClient) GetBlockTemplate(walletAddress string, reserveSize uint)
 
 func (dc *DaemonClient) SubmitBlock(blockBlobData string) (string, error) {
 	var status string
-	err := dc.jsonRPCRequest("submit_block", blockBlobData, &status)
+	err := dc.jsonRPCRequest("submit_block", []string{blockBlobData}, &status)
 
 	return status, err
 }
