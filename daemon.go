@@ -157,6 +157,17 @@ type HardForkInfoResponse struct {
 	Window         uint   `json:"window"`
 }
 
+type Ban struct {
+	Host    string `json:"host"`
+	IP      uint   `json:"ip"`
+	Ban     bool   `json:"ban"`
+	Seconds uint   `json:"seconds"`
+}
+
+type SetBansResponse struct {
+	Status string `json:"status"`
+}
+
 func NewDaemonClient(endpoint string, username string, password string) *DaemonClient {
 	return &DaemonClient{endpoint: endpoint, username: username, password: password}
 }
@@ -318,4 +329,17 @@ func (dc *DaemonClient) HardForkInfo() (HardForkInfoResponse, error) {
 	err := dc.jsonRPCRequest("hard_fork_info", nil, &hardForkInfoResponse)
 
 	return hardForkInfoResponse, err
+}
+
+func (dc *DaemonClient) SetBans(bans []Ban) (SetBansResponse, error) {
+	var setBansResponse SetBansResponse
+
+	type jsonRPCParams struct {
+		Bans []Ban `json:"bans"`
+	}
+
+	params := jsonRPCParams{Bans: bans}
+	err := dc.jsonRPCRequest("set_bans", params, &setBansResponse)
+
+	return setBansResponse, err
 }
