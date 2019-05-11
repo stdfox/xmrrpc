@@ -204,6 +204,18 @@ type FeeEstimateResponse struct {
 	Untrusted bool   `json:"untrusted"`
 }
 
+type Chain struct {
+	BlockHash  string `json:"block_hash"`
+	Difficulty uint   `json:"difficulty"`
+	Height     uint   `json:"height"`
+	Length     uint   `json:"length"`
+}
+
+type AlternateChainsResponse struct {
+	Chains []Chain `json:"chains"`
+	Status string  `json:"status"`
+}
+
 func NewDaemonClient(endpoint string, username string, password string) *DaemonClient {
 	return &DaemonClient{endpoint: endpoint, username: username, password: password}
 }
@@ -449,4 +461,11 @@ func (dc *DaemonClient) GetFeeEstimate(graceBlocks uint) (FeeEstimateResponse, e
 	err := dc.jsonRPCRequest("get_fee_estimate", params, &feeEstimateResponse)
 
 	return feeEstimateResponse, err
+}
+
+func (dc *DaemonClient) GetAlternateChains() (AlternateChainsResponse, error) {
+	var alternateChainsResponse AlternateChainsResponse
+	err := dc.jsonRPCRequest("get_alternate_chains", nil, &alternateChainsResponse)
+
+	return alternateChainsResponse, err
 }
