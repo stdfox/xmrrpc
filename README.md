@@ -20,6 +20,7 @@ Current API version: network height of 1,562,465.
 - get_info
 - hard_fork_info
 - set_bans
+- get_bans
 
 ## License
 [MIT License](https://github.com/stdfox/xmrrpc/blob/master/LICENSE.md)

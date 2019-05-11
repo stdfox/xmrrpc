@@ -168,6 +168,11 @@ type SetBansResponse struct {
 	Status string `json:"status"`
 }
 
+type BansResponse struct {
+	Bans   []Ban  `json:"bans"`
+	Status string `json:"status"`
+}
+
 func NewDaemonClient(endpoint string, username string, password string) *DaemonClient {
 	return &DaemonClient{endpoint: endpoint, username: username, password: password}
 }
@@ -342,4 +347,11 @@ func (dc *DaemonClient) SetBans(bans []Ban) (SetBansResponse, error) {
 	err := dc.jsonRPCRequest("set_bans", params, &setBansResponse)
 
 	return setBansResponse, err
+}
+
+func (dc *DaemonClient) GetBans() (BansResponse, error) {
+	var bansResponse BansResponse
+	err := dc.jsonRPCRequest("get_bans", nil, &bansResponse)
+
+	return bansResponse, err
 }
