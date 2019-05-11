@@ -300,7 +300,7 @@ func (dc *DaemonClient) GetBlockHeaderByHeight(height uint) (BlockHeaderResponse
 	return blockHeaderResponse, err
 }
 
-func (dc *DaemonClient) GetBlockHeadersRange(start_height uint, end_height uint) (BlockHeadersResponse, error) {
+func (dc *DaemonClient) GetBlockHeadersRange(startHeight uint, endHeight uint) (BlockHeadersResponse, error) {
 	var blockHeadersResponse BlockHeadersResponse
 
 	type jsonRPCParams struct {
@@ -308,7 +308,7 @@ func (dc *DaemonClient) GetBlockHeadersRange(start_height uint, end_height uint)
 		EndHeight   uint `json:"end_height"`
 	}
 
-	params := jsonRPCParams{StartHeight: start_height, EndHeight: end_height}
+	params := jsonRPCParams{StartHeight: startHeight, EndHeight: endHeight}
 	err := dc.jsonRPCRequest("get_block_headers_range", params, &blockHeadersResponse)
 
 	return blockHeadersResponse, err
