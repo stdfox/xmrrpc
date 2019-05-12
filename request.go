@@ -90,14 +90,14 @@ func request(method string, url string, body []byte, username string, password s
 
 		cnonce := randomKey()
 		response := h(strings.Join([]string{ha1, nonceHeader, nc, cnonce, qopHeader, ha2}, ":"))
-		AuthHeader := fmt.Sprintf(`Digest username="%s", realm="%s", nonce="%s", uri="%s", algorithm="%s", response="%s", qop=%s, nc=%s, cnonce="%s"`, username, realmHeader, nonceHeader, "/json_rpc", algorithm, response, qopHeader, nc, cnonce)
+		authHeader := fmt.Sprintf(`Digest username="%s", realm="%s", nonce="%s", uri="%s", algorithm="%s", response="%s", qop=%s, nc=%s, cnonce="%s"`, username, realmHeader, nonceHeader, "/json_rpc", algorithm, response, qopHeader, nc, cnonce)
 
 		req2, err := http.NewRequest(method, url, bytes.NewReader(body))
 		if err != nil {
 			return nil, err
 		}
 		req2.Header.Set("Content-Type", "application/json")
-		req2.Header.Set("Authorization", AuthHeader)
+		req2.Header.Set("Authorization", authHeader)
 
 		client2 := &http.Client{}
 		res2, err := client2.Do(req2)
