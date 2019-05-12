@@ -69,12 +69,12 @@ func main() {
 		panic(err)
 	}
 
-	fmt.Printf("[Status: %s] Height: %d Hash: %s\n", res.Status, res.BlockHeader.Height, res.BlockHeader.Hash)
+	fmt.Printf("[Status: %s] Hash: %s\n", res.Status, res.BlockHeader.Hash)
 }
 ```
 ```shell
 $ go run main.go
-[Status: OK] Height: 320954 Hash: e3b5411b608f76378dd70e95c3f7efa1b624919955d50cad934744faea3e9beb
+[Status: OK] Hash: fb7070a2787a71a900b527fe30f0b32063cf0441511a1be32203e1d9994a7f43
 ```
 
 ## License
