@@ -1,7 +1,6 @@
 package xmrrpc
 
 import (
-	"bytes"
 	"encoding/json"
 	"errors"
 	"math/rand"
@@ -275,14 +274,8 @@ func (dc *DaemonClient) jsonRPCRequest(method string, params interface{}, reply 
 		return err
 	}
 
-	httpRequest, err := http.NewRequest(http.MethodPost, dc.endpoint, bytes.NewReader(jsonRPCRequestBody))
-	if err != nil {
-		return err
-	}
-	httpRequest.Header.Set("Content-Type", "application/json")
-
-	httpClient := &http.Client{}
-	httpResponse, err := httpClient.Do(httpRequest)
+	var httpResponse *http.Response
+	httpResponse, err = request(http.MethodPost, dc.endpoint, jsonRPCRequestBody, dc.username, dc.password)
 	if err != nil {
 		return err
 	}

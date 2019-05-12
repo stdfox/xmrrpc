@@ -1,7 +1,7 @@
 # xmrrpc
 Golang client for Monero (XMR) Json RPC API.
 
-Support daemon's Json-RPC.
+Support daemon's Json-RPC. Support digest authentication.
 
 Tested on: Monero 'Boron Butterfly' (v0.14.0.2-release), stagenet.
 
@@ -62,7 +62,7 @@ import (
 )
 
 func main() {
-	daemonClient := xmrrpc.NewDaemonClient("http://127.0.0.1:38081/json_rpc", "", "")
+	daemonClient := xmrrpc.NewDaemonClient("http://127.0.0.1:38081/json_rpc", "username", "password")
 
 	res, err := daemonClient.GetLastBlockHeader()
 	if err != nil {
