@@ -85,7 +85,7 @@ type BlockHeadersResponse struct {
 type BlockResponse struct {
 	Blob        string      `json:"blob"`
 	BlockHeader BlockHeader `json:"block_header"`
-	Json        string      `json:"json"`
+	JSON        string      `json:"json"`
 	Status      string      `json:"status"`
 	Untrusted   bool        `json:"untrusted"`
 }
@@ -265,12 +265,12 @@ type HeightResponse struct {
 }
 
 type UpdateResponse struct {
-	AutoUri string `json:"auto_uri"`
+	AutoURI string `json:"auto_uri"`
 	Hash    string `json:"hash"`
 	Path    string `json:"path"`
 	Status  string `json:"status"`
 	Update  bool   `json:"update"`
-	UserUri string `json:"user_uri"`
+	UserURI string `json:"user_uri"`
 	Version string `json:"version"`
 }
 

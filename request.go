@@ -70,7 +70,7 @@ func request(method string, url string, body []byte, username string, password s
 		io.Copy(ioutil.Discard, res1.Body)
 		res1.Body.Close()
 
-		var authorization map[string]string = digestAuthParams(res1)
+		var authorization = digestAuthParams(res1)
 		var realmHeader = authorization["realm"]
 		var qopHeader = authorization["qop"]
 		var nonceHeader = authorization["nonce"]
