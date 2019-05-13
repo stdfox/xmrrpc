@@ -3,6 +3,7 @@ package xmrrpc
 import (
 	"encoding/json"
 	"errors"
+	"io/ioutil"
 	"math/rand"
 	"net/http"
 )
@@ -21,10 +22,10 @@ type jsonRPCRequest struct {
 }
 
 type jsonRPCResponse struct {
-	Version string           `json:"jsonrpc"`
-	ID      uint64           `json:"id"`
-	Result  *json.RawMessage `json:"result"`
-	Error   jsonRPCError     `json:"error"`
+	Version string          `json:"jsonrpc"`
+	ID      uint64          `json:"id"`
+	Result  json.RawMessage `json:"result"`
+	Error   jsonRPCError    `json:"error"`
 }
 
 type jsonRPCError struct {
@@ -261,52 +262,60 @@ func NewDaemonClient(endpoint string, username string, password string) *DaemonC
 	return &DaemonClient{endpoint: endpoint, username: username, password: password}
 }
 
-func (dc *DaemonClient) jsonRPCRequest(method string, params interface{}, reply interface{}) error {
-	jsonRPCRequest := &jsonRPCRequest{
+func (dc *DaemonClient) jsonRequest(method string, args interface{}, reply interface{}) error {
+	params := &jsonRPCRequest{
 		Version: "2.0",
 		ID:      rand.Uint64(),
 		Method:  method,
-		Params:  params,
+		Params:  args,
 	}
 
-	jsonRPCRequestBody, err := json.Marshal(jsonRPCRequest)
-	if err != nil {
+	res := &jsonRPCResponse{}
+	if err := dc.rpcRequest("/json_rpc", params, res); err != nil {
 		return err
 	}
 
-	var httpResponse *http.Response
-	httpResponse, err = request(http.MethodPost, dc.endpoint, jsonRPCRequestBody, dc.username, dc.password)
-	if err != nil {
-		return err
-	}
-	defer httpResponse.Body.Close()
-
-	jsonRPCResponse := &jsonRPCResponse{}
-	if err := json.NewDecoder(httpResponse.Body).Decode(&jsonRPCResponse); err != nil {
-		return err
+	if res.Error.Code < 0 {
+		return errors.New(res.Error.Message)
 	}
 
-	if jsonRPCResponse.Error.Code < 0 {
-		return errors.New(jsonRPCResponse.Error.Message)
-	}
-
-	if jsonRPCResponse.Result == nil {
+	if res.Result == nil {
 		return errors.New("Unexpected null result")
 	}
 
-	return json.Unmarshal(*jsonRPCResponse.Result, reply)
+	return json.Unmarshal(res.Result, reply)
+}
+
+func (dc *DaemonClient) rpcRequest(method string, args interface{}, reply interface{}) error {
+	body, err := json.Marshal(args)
+	if err != nil {
+		return err
+	}
+
+	res, err := request(http.MethodPost, dc.endpoint+method, body, dc.username, dc.password)
+	if err != nil {
+		return err
+	}
+
+	body, err = ioutil.ReadAll(res.Body)
+	if err != nil {
+		return err
+	}
+	res.Body.Close()
+
+	return json.Unmarshal(body, reply)
 }
 
 func (dc *DaemonClient) GetBlockCount() (BlockCountResponse, error) {
 	var blockCountResponse BlockCountResponse
-	err := dc.jsonRPCRequest("get_block_count", nil, &blockCountResponse)
+	err := dc.jsonRequest("get_block_count", nil, &blockCountResponse)
 
 	return blockCountResponse, err
 }
 
 func (dc *DaemonClient) OnGetBlockHash(blockHeight int) (string, error) {
 	var blockHash string
-	err := dc.jsonRPCRequest("on_get_block_hash", []int{blockHeight}, &blockHash)
+	err := dc.jsonRequest("on_get_block_hash", []int{blockHeight}, &blockHash)
 
 	return blockHash, err
 }
@@ -320,21 +329,21 @@ func (dc *DaemonClient) GetBlockTemplate(walletAddress string, reserveSize uint)
 	}
 
 	params := jsonRPCParams{WalletAddress: walletAddress, ReserveSize: reserveSize}
-	err := dc.jsonRPCRequest("get_block_template", params, &blockTemplateResponse)
+	err := dc.jsonRequest("get_block_template", params, &blockTemplateResponse)
 
 	return blockTemplateResponse, err
 }
 
 func (dc *DaemonClient) SubmitBlock(blockBlobData string) (string, error) {
 	var status string
-	err := dc.jsonRPCRequest("submit_block", []string{blockBlobData}, &status)
+	err := dc.jsonRequest("submit_block", []string{blockBlobData}, &status)
 
 	return status, err
 }
 
 func (dc *DaemonClient) GetLastBlockHeader() (BlockHeaderResponse, error) {
 	var blockHeaderResponse BlockHeaderResponse
-	err := dc.jsonRPCRequest("get_last_block_header", nil, &blockHeaderResponse)
+	err := dc.jsonRequest("get_last_block_header", nil, &blockHeaderResponse)
 
 	return blockHeaderResponse, err
 }
@@ -347,7 +356,7 @@ func (dc *DaemonClient) GetBlockHeaderByHash(hash string) (BlockHeaderResponse, 
 	}
 
 	params := jsonRPCParams{Hash: hash}
-	err := dc.jsonRPCRequest("get_block_header_by_hash", params, &blockHeaderResponse)
+	err := dc.jsonRequest("get_block_header_by_hash", params, &blockHeaderResponse)
 
 	return blockHeaderResponse, err
 }
@@ -360,7 +369,7 @@ func (dc *DaemonClient) GetBlockHeaderByHeight(height uint) (BlockHeaderResponse
 	}
 
 	params := jsonRPCParams{Height: height}
-	err := dc.jsonRPCRequest("get_block_header_by_height", params, &blockHeaderResponse)
+	err := dc.jsonRequest("get_block_header_by_height", params, &blockHeaderResponse)
 
 	return blockHeaderResponse, err
 }
@@ -374,7 +383,7 @@ func (dc *DaemonClient) GetBlockHeadersRange(startHeight uint, endHeight uint) (
 	}
 
 	params := jsonRPCParams{StartHeight: startHeight, EndHeight: endHeight}
-	err := dc.jsonRPCRequest("get_block_headers_range", params, &blockHeadersResponse)
+	err := dc.jsonRequest("get_block_headers_range", params, &blockHeadersResponse)
 
 	return blockHeadersResponse, err
 }
@@ -388,28 +397,28 @@ func (dc *DaemonClient) GetBlock(height uint, hash string) (BlockResponse, error
 	}
 
 	params := jsonRPCParams{Height: height, Hash: hash}
-	err := dc.jsonRPCRequest("get_block", params, &blockResponse)
+	err := dc.jsonRequest("get_block", params, &blockResponse)
 
 	return blockResponse, err
 }
 
 func (dc *DaemonClient) GetConnections() (ConnectionsResponse, error) {
 	var connectionsResponse ConnectionsResponse
-	err := dc.jsonRPCRequest("get_connections", nil, &connectionsResponse)
+	err := dc.jsonRequest("get_connections", nil, &connectionsResponse)
 
 	return connectionsResponse, err
 }
 
 func (dc *DaemonClient) GetInfo() (InfoResponse, error) {
 	var infoResponse InfoResponse
-	err := dc.jsonRPCRequest("get_info", nil, &infoResponse)
+	err := dc.jsonRequest("get_info", nil, &infoResponse)
 
 	return infoResponse, err
 }
 
 func (dc *DaemonClient) HardForkInfo() (HardForkInfoResponse, error) {
 	var hardForkInfoResponse HardForkInfoResponse
-	err := dc.jsonRPCRequest("hard_fork_info", nil, &hardForkInfoResponse)
+	err := dc.jsonRequest("hard_fork_info", nil, &hardForkInfoResponse)
 
 	return hardForkInfoResponse, err
 }
@@ -422,14 +431,14 @@ func (dc *DaemonClient) SetBans(bans []Ban) (StatusResponse, error) {
 	}
 
 	params := jsonRPCParams{Bans: bans}
-	err := dc.jsonRPCRequest("set_bans", params, &statusResponse)
+	err := dc.jsonRequest("set_bans", params, &statusResponse)
 
 	return statusResponse, err
 }
 
 func (dc *DaemonClient) GetBans() (BansResponse, error) {
 	var bansResponse BansResponse
-	err := dc.jsonRPCRequest("get_bans", nil, &bansResponse)
+	err := dc.jsonRequest("get_bans", nil, &bansResponse)
 
 	return bansResponse, err
 }
@@ -442,7 +451,7 @@ func (dc *DaemonClient) FlushTxpool(txids []string) (StatusResponse, error) {
 	}
 
 	params := jsonRPCParams{TxIDs: txids}
-	err := dc.jsonRPCRequest("flush_txpool", params, &statusResponse)
+	err := dc.jsonRequest("flush_txpool", params, &statusResponse)
 
 	return statusResponse, err
 }
@@ -459,14 +468,14 @@ func (dc *DaemonClient) GetOutputHistogram(amounts []uint, minCount uint, maxCou
 	}
 
 	params := jsonRPCParams{Amounts: amounts, MinCount: minCount, MaxCount: maxCount, Unlocked: unlocked, RecentCutoff: recentCutoff}
-	err := dc.jsonRPCRequest("get_output_histogram", params, &outputHistogramResponse)
+	err := dc.jsonRequest("get_output_histogram", params, &outputHistogramResponse)
 
 	return outputHistogramResponse, err
 }
 
 func (dc *DaemonClient) GetVersion() (VersionResponse, error) {
 	var versionResponse VersionResponse
-	err := dc.jsonRPCRequest("get_version", nil, &versionResponse)
+	err := dc.jsonRequest("get_version", nil, &versionResponse)
 
 	return versionResponse, err
 }
@@ -480,7 +489,7 @@ func (dc *DaemonClient) GetCoinbaseTxSum(height uint, count uint) (CoinbaseTxSum
 	}
 
 	params := jsonRPCParams{Height: height, Count: count}
-	err := dc.jsonRPCRequest("get_coinbase_tx_sum", params, &coinbaseTxSum)
+	err := dc.jsonRequest("get_coinbase_tx_sum", params, &coinbaseTxSum)
 
 	return coinbaseTxSum, err
 }
@@ -493,14 +502,14 @@ func (dc *DaemonClient) GetFeeEstimate(graceBlocks uint) (FeeEstimateResponse, e
 	}
 
 	params := jsonRPCParams{GraceBlocks: graceBlocks}
-	err := dc.jsonRPCRequest("get_fee_estimate", params, &feeEstimateResponse)
+	err := dc.jsonRequest("get_fee_estimate", params, &feeEstimateResponse)
 
 	return feeEstimateResponse, err
 }
 
 func (dc *DaemonClient) GetAlternateChains() (AlternateChainsResponse, error) {
 	var alternateChainsResponse AlternateChainsResponse
-	err := dc.jsonRPCRequest("get_alternate_chains", nil, &alternateChainsResponse)
+	err := dc.jsonRequest("get_alternate_chains", nil, &alternateChainsResponse)
 
 	return alternateChainsResponse, err
 }
@@ -513,21 +522,21 @@ func (dc *DaemonClient) RelayTx(txids []string) (StatusResponse, error) {
 	}
 
 	params := jsonRPCParams{TxIDs: txids}
-	err := dc.jsonRPCRequest("relay_tx", params, &statusResponse)
+	err := dc.jsonRequest("relay_tx", params, &statusResponse)
 
 	return statusResponse, err
 }
 
 func (dc *DaemonClient) SyncInfo() (SyncInfoResponse, error) {
 	var syncInfoResponse SyncInfoResponse
-	err := dc.jsonRPCRequest("sync_info", nil, &syncInfoResponse)
+	err := dc.jsonRequest("sync_info", nil, &syncInfoResponse)
 
 	return syncInfoResponse, err
 }
 
 func (dc *DaemonClient) GetTxpoolBacklog() (TxpoolBacklogResponse, error) {
 	var txpoolBacklogResponse TxpoolBacklogResponse
-	err := dc.jsonRPCRequest("get_txpool_backlog", nil, &txpoolBacklogResponse)
+	err := dc.jsonRequest("get_txpool_backlog", nil, &txpoolBacklogResponse)
 
 	return txpoolBacklogResponse, err
 }
@@ -543,7 +552,7 @@ func (dc *DaemonClient) GetOutputDistribution(amounts []uint, cumulative bool, f
 	}
 
 	params := jsonRPCParams{Amounts: amounts, Cumulative: cumulative, FromHeight: fromHeight, ToHeight: toHeight}
-	err := dc.jsonRPCRequest("get_output_distribution", params, &outputDistributionResponse)
+	err := dc.jsonRequest("get_output_distribution", params, &outputDistributionResponse)
 
 	return outputDistributionResponse, err
 }
