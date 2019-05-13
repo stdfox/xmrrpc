@@ -323,159 +323,159 @@ func (dc *DaemonClient) rpcRequest(method string, args interface{}, reply interf
 }
 
 func (dc *DaemonClient) GetBlockCount() (BlockCountResponse, error) {
-	var blockCountResponse BlockCountResponse
-	err := dc.jsonRequest("get_block_count", nil, &blockCountResponse)
+	var response BlockCountResponse
+	err := dc.jsonRequest("get_block_count", nil, &response)
 
-	return blockCountResponse, err
+	return response, err
 }
 
 func (dc *DaemonClient) OnGetBlockHash(blockHeight int) (string, error) {
-	var blockHash string
-	err := dc.jsonRequest("on_get_block_hash", []int{blockHeight}, &blockHash)
+	var response string
+	err := dc.jsonRequest("on_get_block_hash", []int{blockHeight}, &response)
 
-	return blockHash, err
+	return response, err
 }
 
 func (dc *DaemonClient) GetBlockTemplate(walletAddress string, reserveSize uint) (BlockTemplateResponse, error) {
-	var blockTemplateResponse BlockTemplateResponse
+	var response BlockTemplateResponse
 
-	type jsonRPCParams struct {
+	type Params struct {
 		WalletAddress string `json:"wallet_address"`
 		ReserveSize   uint   `json:"reserve_size"`
 	}
 
-	params := jsonRPCParams{WalletAddress: walletAddress, ReserveSize: reserveSize}
-	err := dc.jsonRequest("get_block_template", params, &blockTemplateResponse)
+	params := Params{WalletAddress: walletAddress, ReserveSize: reserveSize}
+	err := dc.jsonRequest("get_block_template", params, &response)
 
-	return blockTemplateResponse, err
+	return response, err
 }
 
 func (dc *DaemonClient) SubmitBlock(blockBlobData string) (string, error) {
-	var status string
-	err := dc.jsonRequest("submit_block", []string{blockBlobData}, &status)
+	var response string
+	err := dc.jsonRequest("submit_block", []string{blockBlobData}, &response)
 
-	return status, err
+	return response, err
 }
 
 func (dc *DaemonClient) GetLastBlockHeader() (BlockHeaderResponse, error) {
-	var blockHeaderResponse BlockHeaderResponse
-	err := dc.jsonRequest("get_last_block_header", nil, &blockHeaderResponse)
+	var response BlockHeaderResponse
+	err := dc.jsonRequest("get_last_block_header", nil, &response)
 
-	return blockHeaderResponse, err
+	return response, err
 }
 
 func (dc *DaemonClient) GetBlockHeaderByHash(hash string) (BlockHeaderResponse, error) {
-	var blockHeaderResponse BlockHeaderResponse
+	var response BlockHeaderResponse
 
-	type jsonRPCParams struct {
+	type Params struct {
 		Hash string `json:"hash"`
 	}
 
-	params := jsonRPCParams{Hash: hash}
-	err := dc.jsonRequest("get_block_header_by_hash", params, &blockHeaderResponse)
+	params := Params{Hash: hash}
+	err := dc.jsonRequest("get_block_header_by_hash", params, &response)
 
-	return blockHeaderResponse, err
+	return response, err
 }
 
 func (dc *DaemonClient) GetBlockHeaderByHeight(height uint) (BlockHeaderResponse, error) {
-	var blockHeaderResponse BlockHeaderResponse
+	var response BlockHeaderResponse
 
-	type jsonRPCParams struct {
+	type Params struct {
 		Height uint `json:"height"`
 	}
 
-	params := jsonRPCParams{Height: height}
-	err := dc.jsonRequest("get_block_header_by_height", params, &blockHeaderResponse)
+	params := Params{Height: height}
+	err := dc.jsonRequest("get_block_header_by_height", params, &response)
 
-	return blockHeaderResponse, err
+	return response, err
 }
 
 func (dc *DaemonClient) GetBlockHeadersRange(startHeight uint, endHeight uint) (BlockHeadersResponse, error) {
-	var blockHeadersResponse BlockHeadersResponse
+	var response BlockHeadersResponse
 
-	type jsonRPCParams struct {
+	type Params struct {
 		StartHeight uint `json:"start_height"`
 		EndHeight   uint `json:"end_height"`
 	}
 
-	params := jsonRPCParams{StartHeight: startHeight, EndHeight: endHeight}
-	err := dc.jsonRequest("get_block_headers_range", params, &blockHeadersResponse)
+	params := Params{StartHeight: startHeight, EndHeight: endHeight}
+	err := dc.jsonRequest("get_block_headers_range", params, &response)
 
-	return blockHeadersResponse, err
+	return response, err
 }
 
 func (dc *DaemonClient) GetBlock(height uint, hash string) (BlockResponse, error) {
-	var blockResponse BlockResponse
+	var response BlockResponse
 
-	type jsonRPCParams struct {
+	type Params struct {
 		Height uint   `json:"height"`
 		Hash   string `json:"hash"`
 	}
 
-	params := jsonRPCParams{Height: height, Hash: hash}
-	err := dc.jsonRequest("get_block", params, &blockResponse)
+	params := Params{Height: height, Hash: hash}
+	err := dc.jsonRequest("get_block", params, &response)
 
-	return blockResponse, err
+	return response, err
 }
 
 func (dc *DaemonClient) GetConnections() (ConnectionsResponse, error) {
-	var connectionsResponse ConnectionsResponse
-	err := dc.jsonRequest("get_connections", nil, &connectionsResponse)
+	var response ConnectionsResponse
+	err := dc.jsonRequest("get_connections", nil, &response)
 
-	return connectionsResponse, err
+	return response, err
 }
 
 func (dc *DaemonClient) GetInfo() (InfoResponse, error) {
-	var infoResponse InfoResponse
-	err := dc.jsonRequest("get_info", nil, &infoResponse)
+	var response InfoResponse
+	err := dc.jsonRequest("get_info", nil, &response)
 
-	return infoResponse, err
+	return response, err
 }
 
 func (dc *DaemonClient) HardForkInfo() (HardForkInfoResponse, error) {
-	var hardForkInfoResponse HardForkInfoResponse
-	err := dc.jsonRequest("hard_fork_info", nil, &hardForkInfoResponse)
+	var response HardForkInfoResponse
+	err := dc.jsonRequest("hard_fork_info", nil, &response)
 
-	return hardForkInfoResponse, err
+	return response, err
 }
 
 func (dc *DaemonClient) SetBans(bans []Ban) (StatusResponse, error) {
-	var statusResponse StatusResponse
+	var response StatusResponse
 
-	type jsonRPCParams struct {
+	type Params struct {
 		Bans []Ban `json:"bans"`
 	}
 
-	params := jsonRPCParams{Bans: bans}
-	err := dc.jsonRequest("set_bans", params, &statusResponse)
+	params := Params{Bans: bans}
+	err := dc.jsonRequest("set_bans", params, &response)
 
-	return statusResponse, err
+	return response, err
 }
 
 func (dc *DaemonClient) GetBans() (BansResponse, error) {
-	var bansResponse BansResponse
-	err := dc.jsonRequest("get_bans", nil, &bansResponse)
+	var response BansResponse
+	err := dc.jsonRequest("get_bans", nil, &response)
 
-	return bansResponse, err
+	return response, err
 }
 
 func (dc *DaemonClient) FlushTxpool(txids []string) (StatusResponse, error) {
-	var statusResponse StatusResponse
+	var response StatusResponse
 
-	type jsonRPCParams struct {
+	type Params struct {
 		TxIDs []string `json:"txids"`
 	}
 
-	params := jsonRPCParams{TxIDs: txids}
-	err := dc.jsonRequest("flush_txpool", params, &statusResponse)
+	params := Params{TxIDs: txids}
+	err := dc.jsonRequest("flush_txpool", params, &response)
 
-	return statusResponse, err
+	return response, err
 }
 
 func (dc *DaemonClient) GetOutputHistogram(amounts []uint, minCount uint, maxCount uint, unlocked bool, recentCutoff uint) (OutputHistogramResponse, error) {
-	var outputHistogramResponse OutputHistogramResponse
+	var response OutputHistogramResponse
 
-	type jsonRPCParams struct {
+	type Params struct {
 		Amounts      []uint `json:"amounts"`
 		MinCount     uint   `json:"min_count"`
 		MaxCount     uint   `json:"max_count"`
@@ -483,94 +483,94 @@ func (dc *DaemonClient) GetOutputHistogram(amounts []uint, minCount uint, maxCou
 		RecentCutoff uint   `json:"recent_cutoff"`
 	}
 
-	params := jsonRPCParams{Amounts: amounts, MinCount: minCount, MaxCount: maxCount, Unlocked: unlocked, RecentCutoff: recentCutoff}
-	err := dc.jsonRequest("get_output_histogram", params, &outputHistogramResponse)
+	params := Params{Amounts: amounts, MinCount: minCount, MaxCount: maxCount, Unlocked: unlocked, RecentCutoff: recentCutoff}
+	err := dc.jsonRequest("get_output_histogram", params, &response)
 
-	return outputHistogramResponse, err
+	return response, err
 }
 
 func (dc *DaemonClient) GetVersion() (VersionResponse, error) {
-	var versionResponse VersionResponse
-	err := dc.jsonRequest("get_version", nil, &versionResponse)
+	var response VersionResponse
+	err := dc.jsonRequest("get_version", nil, &response)
 
-	return versionResponse, err
+	return response, err
 }
 
 func (dc *DaemonClient) GetCoinbaseTxSum(height uint, count uint) (CoinbaseTxSumResponse, error) {
-	var coinbaseTxSum CoinbaseTxSumResponse
+	var response CoinbaseTxSumResponse
 
-	type jsonRPCParams struct {
+	type Params struct {
 		Height uint `json:"height"`
 		Count  uint `json:"count"`
 	}
 
-	params := jsonRPCParams{Height: height, Count: count}
-	err := dc.jsonRequest("get_coinbase_tx_sum", params, &coinbaseTxSum)
+	params := Params{Height: height, Count: count}
+	err := dc.jsonRequest("get_coinbase_tx_sum", params, &response)
 
-	return coinbaseTxSum, err
+	return response, err
 }
 
 func (dc *DaemonClient) GetFeeEstimate(graceBlocks uint) (FeeEstimateResponse, error) {
-	var feeEstimateResponse FeeEstimateResponse
+	var response FeeEstimateResponse
 
-	type jsonRPCParams struct {
+	type Params struct {
 		GraceBlocks uint `json:"grace_blocks"`
 	}
 
-	params := jsonRPCParams{GraceBlocks: graceBlocks}
-	err := dc.jsonRequest("get_fee_estimate", params, &feeEstimateResponse)
+	params := Params{GraceBlocks: graceBlocks}
+	err := dc.jsonRequest("get_fee_estimate", params, &response)
 
-	return feeEstimateResponse, err
+	return response, err
 }
 
 func (dc *DaemonClient) GetAlternateChains() (AlternateChainsResponse, error) {
-	var alternateChainsResponse AlternateChainsResponse
-	err := dc.jsonRequest("get_alternate_chains", nil, &alternateChainsResponse)
+	var response AlternateChainsResponse
+	err := dc.jsonRequest("get_alternate_chains", nil, &response)
 
-	return alternateChainsResponse, err
+	return response, err
 }
 
 func (dc *DaemonClient) RelayTx(txids []string) (StatusResponse, error) {
-	var statusResponse StatusResponse
+	var response StatusResponse
 
-	type jsonRPCParams struct {
+	type Params struct {
 		TxIDs []string `json:"txids"`
 	}
 
-	params := jsonRPCParams{TxIDs: txids}
-	err := dc.jsonRequest("relay_tx", params, &statusResponse)
+	params := Params{TxIDs: txids}
+	err := dc.jsonRequest("relay_tx", params, &response)
 
-	return statusResponse, err
+	return response, err
 }
 
 func (dc *DaemonClient) SyncInfo() (SyncInfoResponse, error) {
-	var syncInfoResponse SyncInfoResponse
-	err := dc.jsonRequest("sync_info", nil, &syncInfoResponse)
+	var response SyncInfoResponse
+	err := dc.jsonRequest("sync_info", nil, &response)
 
-	return syncInfoResponse, err
+	return response, err
 }
 
 func (dc *DaemonClient) GetTxpoolBacklog() (TxpoolBacklogResponse, error) {
-	var txpoolBacklogResponse TxpoolBacklogResponse
-	err := dc.jsonRequest("get_txpool_backlog", nil, &txpoolBacklogResponse)
+	var response TxpoolBacklogResponse
+	err := dc.jsonRequest("get_txpool_backlog", nil, &response)
 
-	return txpoolBacklogResponse, err
+	return response, err
 }
 
 func (dc *DaemonClient) GetOutputDistribution(amounts []uint, cumulative bool, fromHeight uint, toHeight uint) (OutputDistributionResponse, error) {
-	var outputDistributionResponse OutputDistributionResponse
+	var response OutputDistributionResponse
 
-	type jsonRPCParams struct {
+	type Params struct {
 		Amounts    []uint `json:"amounts"`
 		Cumulative bool   `json:"cumulative"`
 		FromHeight uint   `json:"from_height"`
 		ToHeight   uint   `json:"to_height"`
 	}
 
-	params := jsonRPCParams{Amounts: amounts, Cumulative: cumulative, FromHeight: fromHeight, ToHeight: toHeight}
-	err := dc.jsonRequest("get_output_distribution", params, &outputDistributionResponse)
+	params := Params{Amounts: amounts, Cumulative: cumulative, FromHeight: fromHeight, ToHeight: toHeight}
+	err := dc.jsonRequest("get_output_distribution", params, &response)
 
-	return outputDistributionResponse, err
+	return response, err
 }
 
 func (dc *DaemonClient) GetHeight() (HeightResponse, error) {
