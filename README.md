@@ -36,6 +36,9 @@ Current API version: network height of 1,562,465.
 - get_txpool_backlog
 - get_output_distribution
 
+### RPC Methods:
+- /get_height
+
 ## Know issues
 - get_output_distribution - bad server response (invalid character '\x00' in string literal)
 
@@ -64,17 +67,26 @@ import (
 func main() {
 	daemonClient := xmrrpc.NewDaemonClient("http://127.0.0.1:38081/json_rpc", "username", "password")
 
-	res, err := daemonClient.GetLastBlockHeader()
+
+	res1, err := daemonClient.GetLastBlockHeader()
 	if err != nil {
 		panic(err)
 	}
 
-	fmt.Printf("[Status: %s] Hash: %s\n", res.Status, res.BlockHeader.Hash)
+	fmt.Printf("[Status: %s] Hash: %s\n", res1.Status, res1.BlockHeader.Hash)
+
+	res2, err := daemonClient.GetHeight()
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Printf("[Status: %s] Height: %d\n", res2.Status, res2.Height)
 }
 ```
 ```shell
 $ go run main.go
-[Status: OK] Hash: fb7070a2787a71a900b527fe30f0b32063cf0441511a1be32203e1d9994a7f43
+[Status: OK] Hash: 0a5389d9521ea4a049375aca17875d5178fa1978b6e681c9c8f968cc12e3a501
+[Status: OK] Height: 321885
 ```
 
 ## License

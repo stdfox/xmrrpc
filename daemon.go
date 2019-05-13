@@ -258,6 +258,12 @@ type OutputDistributionResponse struct {
 	Untrusted     bool           `json:"untrusted"`
 }
 
+type HeightResponse struct {
+	Height    uint   `json:"height"`
+	Status    string `json:"status"`
+	Untrusted bool   `json:"untrusted"`
+}
+
 func NewDaemonClient(endpoint string, username string, password string) *DaemonClient {
 	return &DaemonClient{endpoint: endpoint, username: username, password: password}
 }
@@ -555,4 +561,15 @@ func (dc *DaemonClient) GetOutputDistribution(amounts []uint, cumulative bool, f
 	err := dc.jsonRequest("get_output_distribution", params, &outputDistributionResponse)
 
 	return outputDistributionResponse, err
+}
+
+func (dc *DaemonClient) GetHeight() (HeightResponse, error) {
+	var response HeightResponse
+
+	type Params struct{}
+
+	params := Params{}
+	err := dc.rpcRequest("/get_height", params, &response)
+
+	return response, err
 }
