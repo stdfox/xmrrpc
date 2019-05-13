@@ -264,6 +264,16 @@ type HeightResponse struct {
 	Untrusted bool   `json:"untrusted"`
 }
 
+type UpdateResponse struct {
+	AutoUri string `json:"auto_uri"`
+	Hash    string `json:"hash"`
+	Path    string `json:"path"`
+	Status  string `json:"status"`
+	Update  bool   `json:"update"`
+	UserUri string `json:"user_uri"`
+	Version string `json:"version"`
+}
+
 func NewDaemonClient(endpoint string, username string, password string) *DaemonClient {
 	return &DaemonClient{endpoint: endpoint, username: username, password: password}
 }
@@ -570,6 +580,20 @@ func (dc *DaemonClient) GetHeight() (HeightResponse, error) {
 
 	params := Params{}
 	err := dc.rpcRequest("/get_height", params, &response)
+
+	return response, err
+}
+
+func (dc *DaemonClient) Update(command string, path string) (UpdateResponse, error) {
+	var response UpdateResponse
+
+	type Params struct {
+		Command string `json:"command"`
+		Path    string `json:"path"`
+	}
+
+	params := Params{Command: command, Path: path}
+	err := dc.rpcRequest("/update", params, &response)
 
 	return response, err
 }

@@ -38,6 +38,7 @@ Current API version: network height of 1,562,465.
 
 ### RPC Methods:
 - /get_height
+- /update
 
 ## Know issues
 - get_output_distribution - bad server response (invalid character '\x00' in string literal)
