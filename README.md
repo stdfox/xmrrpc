@@ -66,8 +66,7 @@ import (
 )
 
 func main() {
-	daemonClient := xmrrpc.NewDaemonClient("http://127.0.0.1:38081/json_rpc", "username", "password")
-
+	daemonClient := xmrrpc.NewDaemonClient("http://127.0.0.1:38081", "username", "password")
 
 	res1, err := daemonClient.GetLastBlockHeader()
 	if err != nil {
