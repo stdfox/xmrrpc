@@ -283,6 +283,32 @@ type TransactionEntry struct {
 	TxHash          string `json:"tx_hash"`
 }
 
+type TxPoolHisto struct {
+	Txs   uint `json:"txs"`
+	Bytes uint `json:"bytes"`
+}
+
+type PoolStats struct {
+	BytesMax        uint        `json:"bytes_max"`
+	BytesMed        uint        `json:"bytes_med"`
+	BytesMin        uint        `json:"bytes_min"`
+	BytesTotal      uint        `json:"bytes_total"`
+	Histo           TxPoolHisto `json:"histo"`
+	Histo98pc       uint        `json:"histo_98pc"`
+	Num10m          uint        `json:"num_10m"`
+	NumDoubleSpends uint        `json:"num_double_spends"`
+	NumFailing      uint        `json:"num_failing"`
+	NumNotRelayed   uint        `json:"num_not_relayed"`
+	Oldest          uint        `json:"oldest"`
+	TxsTotal        uint        `json:"txs_total"`
+}
+
+type TransactionPoolStatsResponse struct {
+	PoolStats PoolStats `json:"pool_stats"`
+	Status    string    `json:"status"`
+	Untrusted bool      `json:"untrusted"`
+}
+
 type UpdateResponse struct {
 	AutoURI string `json:"auto_uri"`
 	Hash    string `json:"hash"`
@@ -614,6 +640,17 @@ func (dc *DaemonClient) GetTransactions(txs_hashes []string, decode_as_json bool
 
 	params := Params{TxsHashes: txs_hashes, DecodeAsJSON: decode_as_json, Prune: prune}
 	err := dc.rpcRequest("/get_transactions", params, &response)
+
+	return response, err
+}
+
+func (dc *DaemonClient) GetTransactionPoolStats() (TransactionPoolStatsResponse, error) {
+	var response TransactionPoolStatsResponse
+
+	type Params struct{}
+
+	params := Params{}
+	err := dc.rpcRequest("/get_transaction_pool_stats", params, &response)
 
 	return response, err
 }
