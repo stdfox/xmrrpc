@@ -264,6 +264,25 @@ type HeightResponse struct {
 	Untrusted bool   `json:"untrusted"`
 }
 
+type TransactionsResponse struct {
+	MissedTx  []string           `json:"missed_tx"`
+	Status    string             `json:"status"`
+	Txs       []TransactionEntry `json:"txs"`
+	TxsAsHex  []string           `json:"txs_as_hex"`
+	TxsAsJSON []string           `json:"txs_as_json"`
+}
+
+type TransactionEntry struct {
+	AsHex           string `json:"as_hex"`
+	AsJSON          string `json:"as_json"`
+	BlockHeight     uint   `json:"block_height"`
+	BlockTimestamp  uint   `json:"block_timestamp"`
+	DoubleSpendSeen bool   `json:"double_spend_seen"`
+	InPool          bool   `json:"in_pool"`
+	OutputIndices   []uint `json:"output_indices"`
+	TxHash          string `json:"tx_hash"`
+}
+
 type UpdateResponse struct {
 	AutoURI string `json:"auto_uri"`
 	Hash    string `json:"hash"`
@@ -580,6 +599,21 @@ func (dc *DaemonClient) GetHeight() (HeightResponse, error) {
 
 	params := Params{}
 	err := dc.rpcRequest("/get_height", params, &response)
+
+	return response, err
+}
+
+func (dc *DaemonClient) GetTransactions(txs_hashes []string, decode_as_json bool, prune bool) (TransactionsResponse, error) {
+	var response TransactionsResponse
+
+	type Params struct {
+		TxsHashes    []string `json:"txs_hashes"`
+		DecodeAsJSON bool     `json:"decode_as_json"`
+		Prune        bool     `json:"prune"`
+	}
+
+	params := Params{TxsHashes: txs_hashes, DecodeAsJSON: decode_as_json, Prune: prune}
+	err := dc.rpcRequest("/get_transactions", params, &response)
 
 	return response, err
 }

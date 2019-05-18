@@ -38,6 +38,7 @@ Current API version: network height of 1,562,465.
 
 ### RPC Methods:
 - /get_height
+- /get_transactions
 - /update
 
 ## Know issues
