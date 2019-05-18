@@ -1,7 +1,7 @@
 # xmrrpc
-Golang client for Monero (XMR) Json RPC API.
+Golang client for Monero (XMR) RPC API.
 
-Support daemon's Json-RPC. Support digest authentication.
+Support daemon's RPC methods. Support digest authentication.
 
 Tested on: Monero 'Boron Butterfly' (v0.14.0.2-release), stagenet.
 
@@ -36,10 +36,10 @@ Current API version: network height of 1,562,465.
 - get_txpool_backlog
 
 ### RPC Methods:
-- /get_height
-- /get_transactions
-- /get_transaction_pool_stats
-- /update
+- get_height
+- get_transactions
+- get_transaction_pool_stats
+- update
 
 ## Installation
 ```bash
@@ -88,7 +88,7 @@ $ go run main.go
 ```
 
 ## License
-[MIT License](https://github.com/stdfox/xmrrpc/blob/master/LICENSE.md)
+Licensed under [MIT License](https://github.com/stdfox/xmrrpc/blob/master/LICENSE.md).
 
 ## Donation ❤
 If this project help you, you can give me a cup of coffee :)
