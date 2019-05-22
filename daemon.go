@@ -283,6 +283,12 @@ type TransactionsResponse struct {
 	TxsAsJSON []string           `json:"txs_as_json"`
 }
 
+type AltBlocksHashesResponse struct {
+	BlksHashes []string `json:"blks_hashes"`
+	Status     string   `json:"status"`
+	Untrusted  bool     `json:"untrusted"`
+}
+
 type TxPoolHisto struct {
 	Txs   uint `json:"txs"`
 	Bytes uint `json:"bytes"`
@@ -640,6 +646,17 @@ func (dc *DaemonClient) GetTransactions(txs_hashes []string, decode_as_json bool
 
 	params := Params{TxsHashes: txs_hashes, DecodeAsJSON: decode_as_json, Prune: prune}
 	err := dc.rpcRequest("/get_transactions", params, &response)
+
+	return response, err
+}
+
+func (dc *DaemonClient) GetAltBlocksHashes() (AltBlocksHashesResponse, error) {
+	var response AltBlocksHashesResponse
+
+	type Params struct{}
+
+	params := Params{}
+	err := dc.rpcRequest("/get_alt_blocks_hashes", params, &response)
 
 	return response, err
 }
