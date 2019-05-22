@@ -756,6 +756,17 @@ func (dc *DaemonClient) MiningStatus() (MiningStatusResponse, error) {
 	return response, err
 }
 
+func (dc *DaemonClient) SaveBC() (StatusResponse, error) {
+	var response StatusResponse
+
+	type Params struct{}
+
+	params := Params{}
+	err := dc.rpcRequest("/save_bc", params, &response)
+
+	return response, err
+}
+
 func (dc *DaemonClient) GetTransactionPoolStats() (TransactionPoolStatsResponse, error) {
 	var response TransactionPoolStatsResponse
 
