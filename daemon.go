@@ -216,7 +216,7 @@ type AlternateChainsResponse struct {
 	Status string  `json:"status"`
 }
 
-type Peer struct {
+type Peers struct {
 	Info Connection `json:"info"`
 }
 
@@ -231,11 +231,11 @@ type Span struct {
 }
 
 type SyncInfoResponse struct {
-	Height       uint   `json:"height"`
-	Peers        []Peer `json:"peers"`
-	Spans        []Span `json:"spans"`
-	Status       string `json:"status"`
-	TargetHeight uint   `json:"target_height"`
+	Height       uint    `json:"height"`
+	Peers        []Peers `json:"peers"`
+	Spans        []Span  `json:"spans"`
+	Status       string  `json:"status"`
+	TargetHeight uint    `json:"target_height"`
 }
 
 type TxpoolBacklogResponse struct {
@@ -317,6 +317,20 @@ type MiningStatusResponse struct {
 	Speed                     uint   `json:"speed"`
 	Status                    string `json:"status"`
 	ThreadsCount              uint   `json:"threads_count"`
+}
+
+type Peer struct {
+	Host     string `json:"host"`
+	ID       uint   `json:"id"`
+	IP       uint   `json:"ip"`
+	LastSeen uint   `json:"last_seen"`
+	Port     uint   `json:"port"`
+}
+
+type PeerListResponse struct {
+	GrayList  []Peer `json:"gray_list"`
+	Status    string `json:"status"`
+	WhiteList []Peer `json:"white_list"`
 }
 
 type TxPoolHisto struct {
@@ -763,6 +777,17 @@ func (dc *DaemonClient) SaveBC() (StatusResponse, error) {
 
 	params := Params{}
 	err := dc.rpcRequest("/save_bc", params, &response)
+
+	return response, err
+}
+
+func (dc *DaemonClient) GetPeerList() (PeerListResponse, error) {
+	var response PeerListResponse
+
+	type Params struct{}
+
+	params := Params{}
+	err := dc.rpcRequest("/get_peer_list", params, &response)
 
 	return response, err
 }
