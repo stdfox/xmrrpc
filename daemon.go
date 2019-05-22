@@ -967,6 +967,17 @@ func (dc *DaemonClient) StartSaveGraph() (StatusResponse, error) {
 	return response, err
 }
 
+func (dc *DaemonClient) StopSaveGraph() (StatusResponse, error) {
+	var response StatusResponse
+
+	type Params struct{}
+
+	params := Params{}
+	err := dc.rpcRequest("/stop_save_graph", params, &response)
+
+	return response, err
+}
+
 func (dc *DaemonClient) Update(command string, path string) (UpdateResponse, error) {
 	var response UpdateResponse
 
