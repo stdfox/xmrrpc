@@ -943,6 +943,19 @@ func (dc *DaemonClient) OutPeers(outPeers uint) (StatusResponse, error) {
 	return response, err
 }
 
+func (dc *DaemonClient) InPeers(inPeers uint) (StatusResponse, error) {
+	var response StatusResponse
+
+	type Params struct {
+		InPeers uint `json:"in_peers"`
+	}
+
+	params := Params{InPeers: inPeers}
+	err := dc.rpcRequest("/out_peers", params, &response)
+
+	return response, err
+}
+
 func (dc *DaemonClient) Update(command string, path string) (UpdateResponse, error) {
 	var response UpdateResponse
 
