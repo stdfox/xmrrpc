@@ -42,6 +42,7 @@ Current API version: network height of 1,562,465.
 - is_key_image_spent
 - send_raw_transaction
 - start_mining
+- stop_mining
 - get_transaction_pool_stats
 - update
 

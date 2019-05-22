@@ -725,6 +725,17 @@ func (dc *DaemonClient) StartMining(doBackgroundMining bool, ignoreBattery bool,
 	return response, err
 }
 
+func (dc *DaemonClient) StopMining() (StatusResponse, error) {
+	var response StatusResponse
+
+	type Params struct{}
+
+	params := Params{}
+	err := dc.rpcRequest("/stop_mining", params, &response)
+
+	return response, err
+}
+
 func (dc *DaemonClient) GetTransactionPoolStats() (TransactionPoolStatsResponse, error) {
 	var response TransactionPoolStatsResponse
 
