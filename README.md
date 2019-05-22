@@ -56,6 +56,7 @@ Current API version: network height of 1,562,465.
 - set_limit
 - out_peers
 - in_peers
+- start_save_graph
 - update
 
 ## Installation

@@ -956,6 +956,17 @@ func (dc *DaemonClient) InPeers(inPeers uint) (StatusResponse, error) {
 	return response, err
 }
 
+func (dc *DaemonClient) StartSaveGraph() (StatusResponse, error) {
+	var response StatusResponse
+
+	type Params struct{}
+
+	params := Params{}
+	err := dc.rpcRequest("/start_save_graph", params, &response)
+
+	return response, err
+}
+
 func (dc *DaemonClient) Update(command string, path string) (UpdateResponse, error) {
 	var response UpdateResponse
 
