@@ -393,6 +393,13 @@ type TransactionPoolStatsResponse struct {
 	Untrusted bool      `json:"untrusted"`
 }
 
+type LimitResponse struct {
+	LimitDown uint   `json:"limit_down"`
+	LimitUp   uint   `json:"limit_up"`
+	Status    string `json:"status"`
+	Untrusted bool   `json:"untrusted"`
+}
+
 type UpdateResponse struct {
 	AutoURI string `json:"auto_uri"`
 	Hash    string `json:"hash"`
@@ -894,6 +901,17 @@ func (dc *DaemonClient) StopDaemon() (StatusResponse, error) {
 
 	params := Params{}
 	err := dc.rpcRequest("/stop_daemon", params, &response)
+
+	return response, err
+}
+
+func (dc *DaemonClient) GetLimit() (LimitResponse, error) {
+	var response LimitResponse
+
+	type Params struct{}
+
+	params := Params{}
+	err := dc.rpcRequest("/get_limit", params, &response)
 
 	return response, err
 }
