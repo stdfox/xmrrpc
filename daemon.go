@@ -930,6 +930,19 @@ func (dc *DaemonClient) SetLimit(limitDown int, limitUp int) (LimitResponse, err
 	return response, err
 }
 
+func (dc *DaemonClient) OutPeers(outPeers uint) (StatusResponse, error) {
+	var response StatusResponse
+
+	type Params struct {
+		OutPeers uint `json:"out_peers"`
+	}
+
+	params := Params{OutPeers: outPeers}
+	err := dc.rpcRequest("/out_peers", params, &response)
+
+	return response, err
+}
+
 func (dc *DaemonClient) Update(command string, path string) (UpdateResponse, error) {
 	var response UpdateResponse
 
