@@ -1,4 +1,5 @@
 # xmrrpc
+
 Golang client for Monero (XMR) RPC API.
 
 Support daemon's RPC methods. Support digest authentication.
@@ -6,11 +7,13 @@ Support daemon's RPC methods. Support digest authentication.
 Tested on: Monero 'Boron Butterfly' (v0.14.0.2-release), stagenet.
 
 ## Documentation
+
 Full API Documentation can be found at https://web.getmonero.org/resources/developer-guides/
 
 Current API version: network height of 1,562,465.
 
-### JSON RPC Methods:
+### JSON RPC Methods
+
 - get_block_count
 - on_get_block_hash
 - get_block_template
@@ -35,7 +38,8 @@ Current API version: network height of 1,562,465.
 - sync_info
 - get_txpool_backlog
 
-### RPC Methods:
+### RPC Methods
+
 - get_height
 - get_transactions
 - get_alt_blocks_hashes
@@ -61,11 +65,13 @@ Current API version: network height of 1,562,465.
 - update
 
 ## Installation
-```bash
+
+```shell
 $ go get github.com/stdfox/xmrrpc
 ```
 
 ## Importing
+
 ```go
 import (
     "github.com/stdfox/xmrrpc"
@@ -73,33 +79,35 @@ import (
 ```
 
 ## Example
+
 ```go
 package main
 
 import (
-	"fmt"
+    "fmt"
 
-	"github.com/stdfox/xmrrpc"
+    "github.com/stdfox/xmrrpc"
 )
 
 func main() {
-	daemonClient := xmrrpc.NewDaemonClient("http://127.0.0.1:38081", "username", "password")
+    daemonClient := xmrrpc.NewDaemonClient("http://127.0.0.1:38081", "username", "password")
 
-	res1, err := daemonClient.GetLastBlockHeader()
-	if err != nil {
-		panic(err)
-	}
+    res1, err := daemonClient.GetLastBlockHeader()
+    if err != nil {
+        panic(err)
+    }
 
-	fmt.Printf("[Status: %s] Hash: %s\n", res1.Status, res1.BlockHeader.Hash)
+    fmt.Printf("[Status: %s] Hash: %s\n", res1.Status, res1.BlockHeader.Hash)
 
-	res2, err := daemonClient.GetHeight()
-	if err != nil {
-		panic(err)
-	}
+    res2, err := daemonClient.GetHeight()
+    if err != nil {
+        panic(err)
+    }
 
-	fmt.Printf("[Status: %s] Height: %d\n", res2.Status, res2.Height)
+    fmt.Printf("[Status: %s] Height: %d\n", res2.Status, res2.Height)
 }
 ```
+
 ```shell
 $ go run main.go
 [Status: OK] Hash: 0a5389d9521ea4a049375aca17875d5178fa1978b6e681c9c8f968cc12e3a501
@@ -107,9 +115,11 @@ $ go run main.go
 ```
 
 ## License
+
 Licensed under [MIT License](https://github.com/stdfox/xmrrpc/blob/master/LICENSE.md).
 
 ## Donation ❤
+
 If this project help you, you can give me a cup of coffee :)
 
 XMR: `49Nz5mVA9sQjKrT65TgdEneiZo1oCp3n8bCtjA3qaCoa5cuPKxqWBcZfD1f1iv6ASjCQUK55m3r4iho7ivMcNvsLDnP3sqX`
