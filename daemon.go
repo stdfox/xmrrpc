@@ -295,6 +295,21 @@ type IsKeyImageSpentResponse struct {
 	Untrusted   bool   `json:"untrusted"`
 }
 
+type SendRawTransactionResponse struct {
+	DoubleSpend   bool   `json:"double_spend"`
+	FeeTooLow     bool   `json:"fee_too_low"`
+	InvalidInput  bool   `json:"invalid_input"`
+	InvalidOutput bool   `json:"invalid_output"`
+	LowMixin      bool   `json:"low_mixin"`
+	NotRct        bool   `json:"not_rct"`
+	NotRelayed    bool   `json:"not_relayed"`
+	Overspend     bool   `json:"overspend"`
+	Reason        string `json:"reason"`
+	Status        string `json:"status"`
+	TooBig        bool   `json:"too_big"`
+	Untrusted     bool   `json:"untrusted"`
+}
+
 type TxPoolHisto struct {
 	Txs   uint `json:"txs"`
 	Bytes uint `json:"bytes"`
@@ -676,6 +691,20 @@ func (dc *DaemonClient) IsKeyImageSpent(keyImages []string) (IsKeyImageSpentResp
 
 	params := Params{KeyImages: keyImages}
 	err := dc.rpcRequest("/is_key_image_spent", params, &response)
+
+	return response, err
+}
+
+func (dc *DaemonClient) SendRawTransaction(txAsHex string, doNotRelay bool) (SendRawTransactionResponse, error) {
+	var response SendRawTransactionResponse
+
+	type Params struct {
+		TxAsHex    string `json:"txAsHex"`
+		DoNotRelay bool   `json:"doNotRelay"`
+	}
+
+	params := Params{TxAsHex: txAsHex, DoNotRelay: doNotRelay}
+	err := dc.rpcRequest("/send_raw_transaction", params, &response)
 
 	return response, err
 }
