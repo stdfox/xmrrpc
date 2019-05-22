@@ -39,6 +39,7 @@ Current API version: network height of 1,562,465.
 - get_height
 - get_transactions
 - get_alt_blocks_hashes
+- is_key_image_spent
 - get_transaction_pool_stats
 - update
 

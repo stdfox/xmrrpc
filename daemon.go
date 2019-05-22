@@ -289,6 +289,12 @@ type AltBlocksHashesResponse struct {
 	Untrusted  bool     `json:"untrusted"`
 }
 
+type IsKeyImageSpentResponse struct {
+	SpentStatus []uint `json:"spent_status"`
+	Status      string `json:"status"`
+	Untrusted   bool   `json:"untrusted"`
+}
+
 type TxPoolHisto struct {
 	Txs   uint `json:"txs"`
 	Bytes uint `json:"bytes"`
@@ -657,6 +663,19 @@ func (dc *DaemonClient) GetAltBlocksHashes() (AltBlocksHashesResponse, error) {
 
 	params := Params{}
 	err := dc.rpcRequest("/get_alt_blocks_hashes", params, &response)
+
+	return response, err
+}
+
+func (dc *DaemonClient) IsKeyImageSpent(keyImages []string) (IsKeyImageSpentResponse, error) {
+	var response IsKeyImageSpentResponse
+
+	type Params struct {
+		KeyImages []string `json:"key_images"`
+	}
+
+	params := Params{KeyImages: keyImages}
+	err := dc.rpcRequest("/is_key_image_spent", params, &response)
 
 	return response, err
 }
