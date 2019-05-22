@@ -805,6 +805,19 @@ func (dc *DaemonClient) SetLogHashRate(visible bool) (StatusResponse, error) {
 	return response, err
 }
 
+func (dc *DaemonClient) SetLogLevel(level uint) (StatusResponse, error) {
+	var response StatusResponse
+
+	type Params struct {
+		Level uint `json:"level"`
+	}
+
+	params := Params{Level: level}
+	err := dc.rpcRequest("/set_log_level", params, &response)
+
+	return response, err
+}
+
 func (dc *DaemonClient) GetTransactionPoolStats() (TransactionPoolStatsResponse, error) {
 	var response TransactionPoolStatsResponse
 
