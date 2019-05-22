@@ -310,6 +310,15 @@ type SendRawTransactionResponse struct {
 	Untrusted     bool   `json:"untrusted"`
 }
 
+type MiningStatusResponse struct {
+	Active                    bool   `json:"active"`
+	Address                   string `json:"address"`
+	IsBackgroundMiningEnabled bool   `json:"is_background_mining_enabled"`
+	Speed                     uint   `json:"speed"`
+	Status                    string `json:"status"`
+	ThreadsCount              uint   `json:"threads_count"`
+}
+
 type TxPoolHisto struct {
 	Txs   uint `json:"txs"`
 	Bytes uint `json:"bytes"`
@@ -732,6 +741,17 @@ func (dc *DaemonClient) StopMining() (StatusResponse, error) {
 
 	params := Params{}
 	err := dc.rpcRequest("/stop_mining", params, &response)
+
+	return response, err
+}
+
+func (dc *DaemonClient) MiningStatus() (MiningStatusResponse, error) {
+	var response MiningStatusResponse
+
+	type Params struct{}
+
+	params := Params{}
+	err := dc.rpcRequest("/mining_status", params, &response)
 
 	return response, err
 }
