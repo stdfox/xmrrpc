@@ -333,6 +333,11 @@ type PeerListResponse struct {
 	WhiteList []Peer `json:"white_list"`
 }
 
+type LogCategoriesResponse struct {
+	Categories string `json:"categories"`
+	Status     string `json:"status"`
+}
+
 type TxPoolHisto struct {
 	Txs   uint `json:"txs"`
 	Bytes uint `json:"bytes"`
@@ -814,6 +819,19 @@ func (dc *DaemonClient) SetLogLevel(level uint) (StatusResponse, error) {
 
 	params := Params{Level: level}
 	err := dc.rpcRequest("/set_log_level", params, &response)
+
+	return response, err
+}
+
+func (dc *DaemonClient) SetLogCategories(categories string) (LogCategoriesResponse, error) {
+	var response LogCategoriesResponse
+
+	type Params struct {
+		Categories string `json:"categories"`
+	}
+
+	params := Params{Categories: categories}
+	err := dc.rpcRequest("/set_log_categories", params, &response)
 
 	return response, err
 }
