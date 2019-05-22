@@ -49,6 +49,7 @@ Current API version: network height of 1,562,465.
 - set_log_hash_rate
 - set_log_level
 - set_log_categories
+- get_transaction_pool
 - get_transaction_pool_stats
 - update
 

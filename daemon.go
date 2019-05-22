@@ -358,6 +358,35 @@ type PoolStats struct {
 	TxsTotal        uint        `json:"txs_total"`
 }
 
+type SpentKeyImages struct {
+	IDHash    string   `json:"id_hash"`
+	TxsHashes []string `json:"txs_hashes"`
+}
+
+type Transactions struct {
+	BlobSize           uint   `json:"blob_size"`
+	DoubleSpendSeen    bool   `json:"double_spend_seen"`
+	DoNotRelay         bool   `json:"do_not_relay"`
+	Fee                uint   `json:"fee"`
+	IDHash             string `json:"id_hash"`
+	KeptByBlock        bool   `json:"kept_by_block"`
+	LastFailedHeight   uint   `json:"last_failed_height"`
+	LastFailedIDHash   string `json:"last_failed_id_hash"`
+	LastRelayedTime    uint   `json:"last_relayed_time"`
+	MaxUsedBlockHeight uint   `json:"max_used_block_height"`
+	MaxUsedBlockHash   string `json:"max_used_block_hash"`
+	ReceiveTime        uint   `json:"receive_time"`
+	Relayed            bool   `json:"relayed"`
+	TxBlob             string `json:"tx_blob"`
+	TxJSON             string `json:"tx_json"`
+}
+
+type TransactionPoolResponse struct {
+	SpentKeyImages []SpentKeyImages `json:"spent_key_images"`
+	Status         string           `json:"status"`
+	Transactions   []Transactions   `json:"transactions"`
+}
+
 type TransactionPoolStatsResponse struct {
 	PoolStats PoolStats `json:"pool_stats"`
 	Status    string    `json:"status"`
@@ -832,6 +861,17 @@ func (dc *DaemonClient) SetLogCategories(categories string) (LogCategoriesRespon
 
 	params := Params{Categories: categories}
 	err := dc.rpcRequest("/set_log_categories", params, &response)
+
+	return response, err
+}
+
+func (dc *DaemonClient) GetTransactionPool() (TransactionPoolResponse, error) {
+	var response TransactionPoolResponse
+
+	type Params struct{}
+
+	params := Params{}
+	err := dc.rpcRequest("/get_transaction_pool", params, &response)
 
 	return response, err
 }
