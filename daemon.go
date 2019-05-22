@@ -792,6 +792,19 @@ func (dc *DaemonClient) GetPeerList() (PeerListResponse, error) {
 	return response, err
 }
 
+func (dc *DaemonClient) SetLogHashRate(visible bool) (StatusResponse, error) {
+	var response StatusResponse
+
+	type Params struct {
+		Visible bool `json:"visible"`
+	}
+
+	params := Params{Visible: visible}
+	err := dc.rpcRequest("/set_log_hash_rate", params, &response)
+
+	return response, err
+}
+
 func (dc *DaemonClient) GetTransactionPoolStats() (TransactionPoolStatsResponse, error) {
 	var response TransactionPoolStatsResponse
 

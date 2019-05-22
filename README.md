@@ -46,6 +46,7 @@ Current API version: network height of 1,562,465.
 - mining_status
 - save_bc
 - get_peer_list
+- set_log_hash_rate
 - get_transaction_pool_stats
 - update
 
