@@ -709,6 +709,22 @@ func (dc *DaemonClient) SendRawTransaction(txAsHex string, doNotRelay bool) (Sen
 	return response, err
 }
 
+func (dc *DaemonClient) StartMining(doBackgroundMining bool, ignoreBattery bool, minerAddress string, threadsCount uint) (StatusResponse, error) {
+	var response StatusResponse
+
+	type Params struct {
+		DoBackgroundMining bool   `json:"do_background_mining"`
+		IgnoreBattery      bool   `json:"ignore_battery"`
+		MinerAddress       string `json:"miner_address"`
+		ThreadsCount       uint   `json:"threads_count"`
+	}
+
+	params := Params{DoBackgroundMining: doBackgroundMining, IgnoreBattery: ignoreBattery, MinerAddress: minerAddress, ThreadsCount: threadsCount}
+	err := dc.rpcRequest("/start_mining", params, &response)
+
+	return response, err
+}
+
 func (dc *DaemonClient) GetTransactionPoolStats() (TransactionPoolStatsResponse, error) {
 	var response TransactionPoolStatsResponse
 
