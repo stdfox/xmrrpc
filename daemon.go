@@ -887,6 +887,17 @@ func (dc *DaemonClient) GetTransactionPoolStats() (TransactionPoolStatsResponse,
 	return response, err
 }
 
+func (dc *DaemonClient) StopDaemon() (StatusResponse, error) {
+	var response StatusResponse
+
+	type Params struct{}
+
+	params := Params{}
+	err := dc.rpcRequest("/stop_daemon", params, &response)
+
+	return response, err
+}
+
 func (dc *DaemonClient) Update(command string, path string) (UpdateResponse, error) {
 	var response UpdateResponse
 

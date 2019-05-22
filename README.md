@@ -51,6 +51,7 @@ Current API version: network height of 1,562,465.
 - set_log_categories
 - get_transaction_pool
 - get_transaction_pool_stats
+- stop_daemon
 - update
 
 ## Installation
