@@ -916,6 +916,20 @@ func (dc *DaemonClient) GetLimit() (LimitResponse, error) {
 	return response, err
 }
 
+func (dc *DaemonClient) SetLimit(limitDown int, limitUp int) (LimitResponse, error) {
+	var response LimitResponse
+
+	type Params struct {
+		LimitDown int `json:"limit_down"`
+		LimitUp   int `json:"limit_up"`
+	}
+
+	params := Params{LimitDown: limitDown, LimitUp: limitUp}
+	err := dc.rpcRequest("/set_limit", params, &response)
+
+	return response, err
+}
+
 func (dc *DaemonClient) Update(command string, path string) (UpdateResponse, error) {
 	var response UpdateResponse
 
