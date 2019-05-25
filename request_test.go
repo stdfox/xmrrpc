@@ -21,3 +21,11 @@ func TestRandomKey(t *testing.T) {
 		t.Errorf("Key random length was incorrect, got: %d, expected: %d.", len(d), 8)
 	}
 }
+
+func TestH(t *testing.T) {
+	h := h("1234567890")
+
+	if h != "e807f1fcf82d132f9bb018ca6738a19f" {
+		t.Errorf("MD5 hash was incorrect, got: %s, expected: %s.", h, "e807f1fcf82d132f9bb018ca6738a19f")
+	}
+}
