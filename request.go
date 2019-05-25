@@ -48,7 +48,10 @@ func randomKey() string {
 
 func h(s string) string {
 	digest := md5.New()
-	digest.Write([]byte(s))
+	_, err := digest.Write([]byte(s))
+	if err != nil {
+		panic("digest.Write() failed")
+	}
 
 	return hex.EncodeToString(digest.Sum(nil))
 }
@@ -60,8 +63,7 @@ func request(method string, url string, body []byte, username string, password s
 	}
 	req1.Header.Set("Content-Type", "application/json")
 
-	client1 := &http.Client{}
-	res1, err := client1.Do(req1)
+	res1, err := http.DefaultClient.Do(req1)
 	if err != nil {
 		return nil, err
 	}
@@ -99,8 +101,7 @@ func request(method string, url string, body []byte, username string, password s
 		req2.Header.Set("Content-Type", "application/json")
 		req2.Header.Set("Authorization", authHeader)
 
-		client2 := &http.Client{}
-		res2, err := client2.Do(req2)
+		res2, err := http.DefaultClient.Do(req2)
 		if err != nil {
 			return nil, err
 		}
