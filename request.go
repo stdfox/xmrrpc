@@ -46,8 +46,7 @@ func randomKey() string {
 
 func h(s string) string {
 	digest := md5.New()
-	_, err := digest.Write([]byte(s))
-	if err != nil {
+	if _, err := digest.Write([]byte(s)); err != nil {
 		panic("digest.Write() failed")
 	}
 
