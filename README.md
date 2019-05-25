@@ -1,5 +1,7 @@
 # xmrrpc
 
+[![Go Report Card](https://goreportcard.com/badge/github.com/stdfox/xmrrpc)](https://goreportcard.com/report/github.com/stdfox/xmrrpc)
+
 Golang client for Monero (XMR) RPC API.
 
 Support daemon's RPC methods. Support digest authentication.
