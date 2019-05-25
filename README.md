@@ -1,6 +1,8 @@
 # xmrrpc
 
-[![Build Status](https://travis-ci.org/stdfox/xmrrpc.svg?branch=master)](https://travis-ci.org/stdfox/xmrrpc) [![Go Report Card](https://goreportcard.com/badge/github.com/stdfox/xmrrpc)](https://goreportcard.com/report/github.com/stdfox/xmrrpc) [![codecov](https://codecov.io/gh/stdfox/xmrrpc/branch/master/graph/badge.svg)](https://codecov.io/gh/stdfox/xmrrpc) [![GoDoc](https://godoc.org/github.com/stdfox/xmrrpc?status.svg)](https://godoc.org/github.com/stdfox/xmrrpc)
+[![travis-ci](https://travis-ci.org/stdfox/xmrrpc.svg?branch=master)](https://travis-ci.org/stdfox/xmrrpc) [![goreportcard](https://goreportcard.com/badge/github.com/stdfox/xmrrpc)](https://goreportcard.com/report/github.com/stdfox/xmrrpc) [![codecov](https://codecov.io/gh/stdfox/xmrrpc/branch/master/graph/badge.svg)](https://codecov.io/gh/stdfox/xmrrpc)
+
+[![license](https://img.shields.io/github/license/stdfox/xmrrpc.svg)](https://github.com/stdfox/xmrrpc/blob/master/LICENSE.md) [![godoc](https://godoc.org/github.com/stdfox/xmrrpc?status.svg)](https://godoc.org/github.com/stdfox/xmrrpc)
 
 Golang client for Monero (XMR) RPC API.
 
