@@ -11,6 +11,7 @@ import (
 	"math/rand"
 	"net/http"
 	"strings"
+	"time"
 )
 
 func digestAuthParams(response *http.Response) map[string]string {
@@ -33,14 +34,11 @@ func digestAuthParams(response *http.Response) map[string]string {
 }
 
 func randomKey() string {
-	k := make([]byte, 8)
-	for bytes := 0; bytes < len(k); {
-		n, err := rand.Read(k[bytes:])
-		if err != nil {
-			panic("rand.Read() failed")
-		}
+	rand.Seed(time.Now().UnixNano())
 
-		bytes += n
+	k := make([]byte, 8)
+	if _, err := rand.Read(k); err != nil {
+		panic("rand.Read() failed")
 	}
 
 	return base64.StdEncoding.EncodeToString(k)
