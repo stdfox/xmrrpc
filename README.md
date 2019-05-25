@@ -10,7 +10,7 @@ Tested on: Monero 'Boron Butterfly' (v0.14.0.2-release), stagenet.
 
 ## Documentation
 
-Full API Documentation can be found at https://web.getmonero.org/resources/developer-guides/
+Full API Documentation can be found at <https://web.getmonero.org/resources/developer-guides/>
 
 Current API version: network height of 1,562,465.
 
