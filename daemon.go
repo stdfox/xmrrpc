@@ -458,159 +458,105 @@ func (dc *DaemonClient) rpcRequest(method string, args interface{}, reply interf
 	return json.Unmarshal(body, reply)
 }
 
-func (dc *DaemonClient) GetBlockCount() (BlockCountResponse, error) {
-	var response BlockCountResponse
-	err := dc.jsonRequest("get_block_count", nil, &response)
-
-	return response, err
+func (dc *DaemonClient) GetBlockCount() (response BlockCountResponse, err error) {
+	return response, dc.jsonRequest("get_block_count", nil, &response)
 }
 
-func (dc *DaemonClient) OnGetBlockHash(blockHeight int) (string, error) {
-	var response string
-	err := dc.jsonRequest("on_get_block_hash", []int{blockHeight}, &response)
-
-	return response, err
+func (dc *DaemonClient) OnGetBlockHash(blockHeight int) (response string, err error) {
+	return response, dc.jsonRequest("on_get_block_hash", []int{blockHeight}, &response)
 }
 
-func (dc *DaemonClient) GetBlockTemplate(walletAddress string, reserveSize uint) (BlockTemplateResponse, error) {
-	var response BlockTemplateResponse
-
+func (dc *DaemonClient) GetBlockTemplate(walletAddress string, reserveSize uint) (response BlockTemplateResponse, err error) {
 	type Params struct {
 		WalletAddress string `json:"wallet_address"`
 		ReserveSize   uint   `json:"reserve_size"`
 	}
 
 	params := Params{WalletAddress: walletAddress, ReserveSize: reserveSize}
-	err := dc.jsonRequest("get_block_template", params, &response)
-
-	return response, err
+	return response, dc.jsonRequest("get_block_template", params, &response)
 }
 
-func (dc *DaemonClient) SubmitBlock(blockBlobData string) (string, error) {
-	var response string
-	err := dc.jsonRequest("submit_block", []string{blockBlobData}, &response)
-
-	return response, err
+func (dc *DaemonClient) SubmitBlock(blockBlobData string) (response string, err error) {
+	return response, dc.jsonRequest("submit_block", []string{blockBlobData}, &response)
 }
 
-func (dc *DaemonClient) GetLastBlockHeader() (BlockHeaderResponse, error) {
-	var response BlockHeaderResponse
-	err := dc.jsonRequest("get_last_block_header", nil, &response)
-
-	return response, err
+func (dc *DaemonClient) GetLastBlockHeader() (response BlockHeaderResponse, err error) {
+	return response, dc.jsonRequest("get_last_block_header", nil, &response)
 }
 
-func (dc *DaemonClient) GetBlockHeaderByHash(hash string) (BlockHeaderResponse, error) {
-	var response BlockHeaderResponse
-
+func (dc *DaemonClient) GetBlockHeaderByHash(hash string) (response BlockHeaderResponse, err error) {
 	type Params struct {
 		Hash string `json:"hash"`
 	}
 
 	params := Params{Hash: hash}
-	err := dc.jsonRequest("get_block_header_by_hash", params, &response)
-
-	return response, err
+	return response, dc.jsonRequest("get_block_header_by_hash", params, &response)
 }
 
-func (dc *DaemonClient) GetBlockHeaderByHeight(height uint) (BlockHeaderResponse, error) {
-	var response BlockHeaderResponse
-
+func (dc *DaemonClient) GetBlockHeaderByHeight(height uint) (response BlockHeaderResponse, err error) {
 	type Params struct {
 		Height uint `json:"height"`
 	}
 
 	params := Params{Height: height}
-	err := dc.jsonRequest("get_block_header_by_height", params, &response)
-
-	return response, err
+	return response, dc.jsonRequest("get_block_header_by_height", params, &response)
 }
 
-func (dc *DaemonClient) GetBlockHeadersRange(startHeight uint, endHeight uint) (BlockHeadersResponse, error) {
-	var response BlockHeadersResponse
-
+func (dc *DaemonClient) GetBlockHeadersRange(startHeight uint, endHeight uint) (response BlockHeadersResponse, err error) {
 	type Params struct {
 		StartHeight uint `json:"start_height"`
 		EndHeight   uint `json:"end_height"`
 	}
 
 	params := Params{StartHeight: startHeight, EndHeight: endHeight}
-	err := dc.jsonRequest("get_block_headers_range", params, &response)
-
-	return response, err
+	return response, dc.jsonRequest("get_block_headers_range", params, &response)
 }
 
-func (dc *DaemonClient) GetBlock(height uint, hash string) (BlockResponse, error) {
-	var response BlockResponse
-
+func (dc *DaemonClient) GetBlock(height uint, hash string) (response BlockResponse, err error) {
 	type Params struct {
 		Height uint   `json:"height"`
 		Hash   string `json:"hash"`
 	}
 
 	params := Params{Height: height, Hash: hash}
-	err := dc.jsonRequest("get_block", params, &response)
-
-	return response, err
+	return response, dc.jsonRequest("get_block", params, &response)
 }
 
-func (dc *DaemonClient) GetConnections() (ConnectionsResponse, error) {
-	var response ConnectionsResponse
-	err := dc.jsonRequest("get_connections", nil, &response)
-
-	return response, err
+func (dc *DaemonClient) GetConnections() (response ConnectionsResponse, err error) {
+	return response, dc.jsonRequest("get_connections", nil, &response)
 }
 
-func (dc *DaemonClient) GetInfo() (InfoResponse, error) {
-	var response InfoResponse
-	err := dc.jsonRequest("get_info", nil, &response)
-
-	return response, err
+func (dc *DaemonClient) GetInfo() (response InfoResponse, err error) {
+	return response, dc.jsonRequest("get_info", nil, &response)
 }
 
-func (dc *DaemonClient) HardForkInfo() (HardForkInfoResponse, error) {
-	var response HardForkInfoResponse
-	err := dc.jsonRequest("hard_fork_info", nil, &response)
-
-	return response, err
+func (dc *DaemonClient) HardForkInfo() (response HardForkInfoResponse, err error) {
+	return response, dc.jsonRequest("hard_fork_info", nil, &response)
 }
 
-func (dc *DaemonClient) SetBans(bans []Ban) (StatusResponse, error) {
-	var response StatusResponse
-
+func (dc *DaemonClient) SetBans(bans []Ban) (response StatusResponse, err error) {
 	type Params struct {
 		Bans []Ban `json:"bans"`
 	}
 
 	params := Params{Bans: bans}
-	err := dc.jsonRequest("set_bans", params, &response)
-
-	return response, err
+	return response, dc.jsonRequest("set_bans", params, &response)
 }
 
-func (dc *DaemonClient) GetBans() (BansResponse, error) {
-	var response BansResponse
-	err := dc.jsonRequest("get_bans", nil, &response)
-
-	return response, err
+func (dc *DaemonClient) GetBans() (response BansResponse, err error) {
+	return response, dc.jsonRequest("get_bans", nil, &response)
 }
 
-func (dc *DaemonClient) FlushTxpool(txids []string) (StatusResponse, error) {
-	var response StatusResponse
-
+func (dc *DaemonClient) FlushTxpool(txids []string) (response StatusResponse, err error) {
 	type Params struct {
 		TxIDs []string `json:"txids"`
 	}
 
 	params := Params{TxIDs: txids}
-	err := dc.jsonRequest("flush_txpool", params, &response)
-
-	return response, err
+	return response, dc.jsonRequest("flush_txpool", params, &response)
 }
 
-func (dc *DaemonClient) GetOutputHistogram(amounts []uint, minCount uint, maxCount uint, unlocked bool, recentCutoff uint) (OutputHistogramResponse, error) {
-	var response OutputHistogramResponse
-
+func (dc *DaemonClient) GetOutputHistogram(amounts []uint, minCount uint, maxCount uint, unlocked bool, recentCutoff uint) (response OutputHistogramResponse, err error) {
 	type Params struct {
 		Amounts      []uint `json:"amounts"`
 		MinCount     uint   `json:"min_count"`
@@ -620,82 +566,54 @@ func (dc *DaemonClient) GetOutputHistogram(amounts []uint, minCount uint, maxCou
 	}
 
 	params := Params{Amounts: amounts, MinCount: minCount, MaxCount: maxCount, Unlocked: unlocked, RecentCutoff: recentCutoff}
-	err := dc.jsonRequest("get_output_histogram", params, &response)
-
-	return response, err
+	return response, dc.jsonRequest("get_output_histogram", params, &response)
 }
 
-func (dc *DaemonClient) GetVersion() (VersionResponse, error) {
-	var response VersionResponse
-	err := dc.jsonRequest("get_version", nil, &response)
-
-	return response, err
+func (dc *DaemonClient) GetVersion() (response VersionResponse, err error) {
+	return response, dc.jsonRequest("get_version", nil, &response)
 }
 
-func (dc *DaemonClient) GetCoinbaseTxSum(height uint, count uint) (CoinbaseTxSumResponse, error) {
-	var response CoinbaseTxSumResponse
-
+func (dc *DaemonClient) GetCoinbaseTxSum(height uint, count uint) (response CoinbaseTxSumResponse, err error) {
 	type Params struct {
 		Height uint `json:"height"`
 		Count  uint `json:"count"`
 	}
 
 	params := Params{Height: height, Count: count}
-	err := dc.jsonRequest("get_coinbase_tx_sum", params, &response)
-
-	return response, err
+	return response, dc.jsonRequest("get_coinbase_tx_sum", params, &response)
 }
 
-func (dc *DaemonClient) GetFeeEstimate(graceBlocks uint) (FeeEstimateResponse, error) {
-	var response FeeEstimateResponse
-
+func (dc *DaemonClient) GetFeeEstimate(graceBlocks uint) (response FeeEstimateResponse, err error) {
 	type Params struct {
 		GraceBlocks uint `json:"grace_blocks"`
 	}
 
 	params := Params{GraceBlocks: graceBlocks}
-	err := dc.jsonRequest("get_fee_estimate", params, &response)
-
-	return response, err
+	return response, dc.jsonRequest("get_fee_estimate", params, &response)
 }
 
-func (dc *DaemonClient) GetAlternateChains() (AlternateChainsResponse, error) {
-	var response AlternateChainsResponse
-	err := dc.jsonRequest("get_alternate_chains", nil, &response)
-
-	return response, err
+func (dc *DaemonClient) GetAlternateChains() (response AlternateChainsResponse, err error) {
+	return response, dc.jsonRequest("get_alternate_chains", nil, &response)
 }
 
-func (dc *DaemonClient) RelayTx(txids []string) (StatusResponse, error) {
-	var response StatusResponse
-
+func (dc *DaemonClient) RelayTx(txids []string) (response StatusResponse, err error) {
 	type Params struct {
 		TxIDs []string `json:"txids"`
 	}
 
 	params := Params{TxIDs: txids}
-	err := dc.jsonRequest("relay_tx", params, &response)
-
-	return response, err
+	return response, dc.jsonRequest("relay_tx", params, &response)
 }
 
-func (dc *DaemonClient) SyncInfo() (SyncInfoResponse, error) {
-	var response SyncInfoResponse
-	err := dc.jsonRequest("sync_info", nil, &response)
-
-	return response, err
+func (dc *DaemonClient) SyncInfo() (response SyncInfoResponse, err error) {
+	return response, dc.jsonRequest("sync_info", nil, &response)
 }
 
-func (dc *DaemonClient) GetTxpoolBacklog() (TxpoolBacklogResponse, error) {
-	var response TxpoolBacklogResponse
-	err := dc.jsonRequest("get_txpool_backlog", nil, &response)
-
-	return response, err
+func (dc *DaemonClient) GetTxpoolBacklog() (response TxpoolBacklogResponse, err error) {
+	return response, dc.jsonRequest("get_txpool_backlog", nil, &response)
 }
 
-func (dc *DaemonClient) GetOutputDistribution(amounts []uint, cumulative bool, fromHeight uint, toHeight uint) (OutputDistributionResponse, error) {
-	var response OutputDistributionResponse
-
+func (dc *DaemonClient) GetOutputDistribution(amounts []uint, cumulative bool, fromHeight uint, toHeight uint) (response OutputDistributionResponse, err error) {
 	type Params struct {
 		Amounts    []uint `json:"amounts"`
 		Cumulative bool   `json:"cumulative"`
@@ -704,25 +622,17 @@ func (dc *DaemonClient) GetOutputDistribution(amounts []uint, cumulative bool, f
 	}
 
 	params := Params{Amounts: amounts, Cumulative: cumulative, FromHeight: fromHeight, ToHeight: toHeight}
-	err := dc.jsonRequest("get_output_distribution", params, &response)
-
-	return response, err
+	return response, dc.jsonRequest("get_output_distribution", params, &response)
 }
 
-func (dc *DaemonClient) GetHeight() (HeightResponse, error) {
-	var response HeightResponse
-
+func (dc *DaemonClient) GetHeight() (response HeightResponse, err error) {
 	type Params struct{}
 
 	params := Params{}
-	err := dc.rpcRequest("/get_height", params, &response)
-
-	return response, err
+	return response, dc.rpcRequest("/get_height", params, &response)
 }
 
-func (dc *DaemonClient) GetTransactions(txs_hashes []string, decode_as_json bool, prune bool) (TransactionsResponse, error) {
-	var response TransactionsResponse
-
+func (dc *DaemonClient) GetTransactions(txs_hashes []string, decode_as_json bool, prune bool) (response TransactionsResponse, err error) {
 	type Params struct {
 		TxsHashes    []string `json:"txs_hashes"`
 		DecodeAsJSON bool     `json:"decode_as_json"`
@@ -730,52 +640,36 @@ func (dc *DaemonClient) GetTransactions(txs_hashes []string, decode_as_json bool
 	}
 
 	params := Params{TxsHashes: txs_hashes, DecodeAsJSON: decode_as_json, Prune: prune}
-	err := dc.rpcRequest("/get_transactions", params, &response)
-
-	return response, err
+	return response, dc.rpcRequest("/get_transactions", params, &response)
 }
 
-func (dc *DaemonClient) GetAltBlocksHashes() (AltBlocksHashesResponse, error) {
-	var response AltBlocksHashesResponse
-
+func (dc *DaemonClient) GetAltBlocksHashes() (response AltBlocksHashesResponse, err error) {
 	type Params struct{}
 
 	params := Params{}
-	err := dc.rpcRequest("/get_alt_blocks_hashes", params, &response)
-
-	return response, err
+	return response, dc.rpcRequest("/get_alt_blocks_hashes", params, &response)
 }
 
-func (dc *DaemonClient) IsKeyImageSpent(keyImages []string) (IsKeyImageSpentResponse, error) {
-	var response IsKeyImageSpentResponse
-
+func (dc *DaemonClient) IsKeyImageSpent(keyImages []string) (response IsKeyImageSpentResponse, err error) {
 	type Params struct {
 		KeyImages []string `json:"key_images"`
 	}
 
 	params := Params{KeyImages: keyImages}
-	err := dc.rpcRequest("/is_key_image_spent", params, &response)
-
-	return response, err
+	return response, dc.rpcRequest("/is_key_image_spent", params, &response)
 }
 
-func (dc *DaemonClient) SendRawTransaction(txAsHex string, doNotRelay bool) (SendRawTransactionResponse, error) {
-	var response SendRawTransactionResponse
-
+func (dc *DaemonClient) SendRawTransaction(txAsHex string, doNotRelay bool) (response SendRawTransactionResponse, err error) {
 	type Params struct {
 		TxAsHex    string `json:"txAsHex"`
 		DoNotRelay bool   `json:"doNotRelay"`
 	}
 
 	params := Params{TxAsHex: txAsHex, DoNotRelay: doNotRelay}
-	err := dc.rpcRequest("/send_raw_transaction", params, &response)
-
-	return response, err
+	return response, dc.rpcRequest("/send_raw_transaction", params, &response)
 }
 
-func (dc *DaemonClient) StartMining(doBackgroundMining bool, ignoreBattery bool, minerAddress string, threadsCount uint) (StatusResponse, error) {
-	var response StatusResponse
-
+func (dc *DaemonClient) StartMining(doBackgroundMining bool, ignoreBattery bool, minerAddress string, threadsCount uint) (response StatusResponse, err error) {
 	type Params struct {
 		DoBackgroundMining bool   `json:"do_background_mining"`
 		IgnoreBattery      bool   `json:"ignore_battery"`
@@ -784,210 +678,140 @@ func (dc *DaemonClient) StartMining(doBackgroundMining bool, ignoreBattery bool,
 	}
 
 	params := Params{DoBackgroundMining: doBackgroundMining, IgnoreBattery: ignoreBattery, MinerAddress: minerAddress, ThreadsCount: threadsCount}
-	err := dc.rpcRequest("/start_mining", params, &response)
-
-	return response, err
+	return response, dc.rpcRequest("/start_mining", params, &response)
 }
 
-func (dc *DaemonClient) StopMining() (StatusResponse, error) {
-	var response StatusResponse
-
+func (dc *DaemonClient) StopMining() (response StatusResponse, err error) {
 	type Params struct{}
 
 	params := Params{}
-	err := dc.rpcRequest("/stop_mining", params, &response)
-
-	return response, err
+	return response, dc.rpcRequest("/stop_mining", params, &response)
 }
 
-func (dc *DaemonClient) MiningStatus() (MiningStatusResponse, error) {
-	var response MiningStatusResponse
-
+func (dc *DaemonClient) MiningStatus() (response MiningStatusResponse, err error) {
 	type Params struct{}
 
 	params := Params{}
-	err := dc.rpcRequest("/mining_status", params, &response)
-
-	return response, err
+	return response, dc.rpcRequest("/mining_status", params, &response)
 }
 
-func (dc *DaemonClient) SaveBC() (StatusResponse, error) {
-	var response StatusResponse
-
+func (dc *DaemonClient) SaveBC() (response StatusResponse, err error) {
 	type Params struct{}
 
 	params := Params{}
-	err := dc.rpcRequest("/save_bc", params, &response)
-
-	return response, err
+	return response, dc.rpcRequest("/save_bc", params, &response)
 }
 
-func (dc *DaemonClient) GetPeerList() (PeerListResponse, error) {
-	var response PeerListResponse
-
+func (dc *DaemonClient) GetPeerList() (response PeerListResponse, err error) {
 	type Params struct{}
 
 	params := Params{}
-	err := dc.rpcRequest("/get_peer_list", params, &response)
-
-	return response, err
+	return response, dc.rpcRequest("/get_peer_list", params, &response)
 }
 
-func (dc *DaemonClient) SetLogHashRate(visible bool) (StatusResponse, error) {
-	var response StatusResponse
-
+func (dc *DaemonClient) SetLogHashRate(visible bool) (response StatusResponse, err error) {
 	type Params struct {
 		Visible bool `json:"visible"`
 	}
 
 	params := Params{Visible: visible}
-	err := dc.rpcRequest("/set_log_hash_rate", params, &response)
-
-	return response, err
+	return response, dc.rpcRequest("/set_log_hash_rate", params, &response)
 }
 
-func (dc *DaemonClient) SetLogLevel(level uint) (StatusResponse, error) {
-	var response StatusResponse
-
+func (dc *DaemonClient) SetLogLevel(level uint) (response StatusResponse, err error) {
 	type Params struct {
 		Level uint `json:"level"`
 	}
 
 	params := Params{Level: level}
-	err := dc.rpcRequest("/set_log_level", params, &response)
-
-	return response, err
+	return response, dc.rpcRequest("/set_log_level", params, &response)
 }
 
-func (dc *DaemonClient) SetLogCategories(categories string) (LogCategoriesResponse, error) {
-	var response LogCategoriesResponse
-
+func (dc *DaemonClient) SetLogCategories(categories string) (response LogCategoriesResponse, err error) {
 	type Params struct {
 		Categories string `json:"categories"`
 	}
 
 	params := Params{Categories: categories}
-	err := dc.rpcRequest("/set_log_categories", params, &response)
-
-	return response, err
+	return response, dc.rpcRequest("/set_log_categories", params, &response)
 }
 
-func (dc *DaemonClient) GetTransactionPool() (TransactionPoolResponse, error) {
-	var response TransactionPoolResponse
-
+func (dc *DaemonClient) GetTransactionPool() (response TransactionPoolResponse, err error) {
 	type Params struct{}
 
 	params := Params{}
-	err := dc.rpcRequest("/get_transaction_pool", params, &response)
-
-	return response, err
+	return response, dc.rpcRequest("/get_transaction_pool", params, &response)
 }
 
-func (dc *DaemonClient) GetTransactionPoolStats() (TransactionPoolStatsResponse, error) {
-	var response TransactionPoolStatsResponse
-
+func (dc *DaemonClient) GetTransactionPoolStats() (response TransactionPoolStatsResponse, err error) {
 	type Params struct{}
 
 	params := Params{}
-	err := dc.rpcRequest("/get_transaction_pool_stats", params, &response)
-
-	return response, err
+	return response, dc.rpcRequest("/get_transaction_pool_stats", params, &response)
 }
 
-func (dc *DaemonClient) StopDaemon() (StatusResponse, error) {
-	var response StatusResponse
-
+func (dc *DaemonClient) StopDaemon() (response StatusResponse, err error) {
 	type Params struct{}
 
 	params := Params{}
-	err := dc.rpcRequest("/stop_daemon", params, &response)
-
-	return response, err
+	return response, dc.rpcRequest("/stop_daemon", params, &response)
 }
 
-func (dc *DaemonClient) GetLimit() (LimitResponse, error) {
-	var response LimitResponse
-
+func (dc *DaemonClient) GetLimit() (response LimitResponse, err error) {
 	type Params struct{}
 
 	params := Params{}
-	err := dc.rpcRequest("/get_limit", params, &response)
-
-	return response, err
+	return response, dc.rpcRequest("/get_limit", params, &response)
 }
 
-func (dc *DaemonClient) SetLimit(limitDown int, limitUp int) (LimitResponse, error) {
-	var response LimitResponse
-
+func (dc *DaemonClient) SetLimit(limitDown int, limitUp int) (response LimitResponse, err error) {
 	type Params struct {
 		LimitDown int `json:"limit_down"`
 		LimitUp   int `json:"limit_up"`
 	}
 
 	params := Params{LimitDown: limitDown, LimitUp: limitUp}
-	err := dc.rpcRequest("/set_limit", params, &response)
-
-	return response, err
+	return response, dc.rpcRequest("/set_limit", params, &response)
 }
 
-func (dc *DaemonClient) OutPeers(outPeers uint) (StatusResponse, error) {
-	var response StatusResponse
-
+func (dc *DaemonClient) OutPeers(outPeers uint) (response StatusResponse, err error) {
 	type Params struct {
 		OutPeers uint `json:"out_peers"`
 	}
 
 	params := Params{OutPeers: outPeers}
-	err := dc.rpcRequest("/out_peers", params, &response)
-
-	return response, err
+	return response, dc.rpcRequest("/out_peers", params, &response)
 }
 
-func (dc *DaemonClient) InPeers(inPeers uint) (StatusResponse, error) {
-	var response StatusResponse
-
+func (dc *DaemonClient) InPeers(inPeers uint) (response StatusResponse, err error) {
 	type Params struct {
 		InPeers uint `json:"in_peers"`
 	}
 
 	params := Params{InPeers: inPeers}
-	err := dc.rpcRequest("/out_peers", params, &response)
-
-	return response, err
+	return response, dc.rpcRequest("/out_peers", params, &response)
 }
 
-func (dc *DaemonClient) StartSaveGraph() (StatusResponse, error) {
-	var response StatusResponse
-
+func (dc *DaemonClient) StartSaveGraph() (response StatusResponse, err error) {
 	type Params struct{}
 
 	params := Params{}
-	err := dc.rpcRequest("/start_save_graph", params, &response)
-
-	return response, err
+	return response, dc.rpcRequest("/start_save_graph", params, &response)
 }
 
-func (dc *DaemonClient) StopSaveGraph() (StatusResponse, error) {
-	var response StatusResponse
-
+func (dc *DaemonClient) StopSaveGraph() (response StatusResponse, err error) {
 	type Params struct{}
 
 	params := Params{}
-	err := dc.rpcRequest("/stop_save_graph", params, &response)
-
-	return response, err
+	return response, dc.rpcRequest("/stop_save_graph", params, &response)
 }
 
-func (dc *DaemonClient) Update(command string, path string) (UpdateResponse, error) {
-	var response UpdateResponse
-
+func (dc *DaemonClient) Update(command string, path string) (response UpdateResponse, err error) {
 	type Params struct {
 		Command string `json:"command"`
 		Path    string `json:"path"`
 	}
 
 	params := Params{Command: command, Path: path}
-	err := dc.rpcRequest("/update", params, &response)
-
-	return response, err
+	return response, dc.rpcRequest("/update", params, &response)
 }
