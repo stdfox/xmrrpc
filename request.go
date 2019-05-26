@@ -15,7 +15,7 @@ import (
 )
 
 func digestAuthParams(response *http.Response) map[string]string {
-	s := strings.SplitN(response.Header.Get("Www-Authenticate"), " ", 2)
+	s := strings.SplitN(response.Header.Get("WWW-Authenticate"), " ", 2)
 	if len(s) != 2 || s[0] != "Digest" {
 		return nil
 	}

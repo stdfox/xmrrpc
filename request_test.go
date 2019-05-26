@@ -9,20 +9,34 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func TestDigestAuthParams(t *testing.T) {
+	res1 := &httptest.ResponseRecorder{}
+	res1.Header().Add("WWW-authenticate", `NotDigest qop="auth",algorithm=MD5`)
+	if assert.Empty(t, digestAuthParams(res1.Result())) {
+		res2 := &httptest.ResponseRecorder{}
+		res2.Header().Add("WWW-authenticate", `Digest qop="auth",algorithm=MD5,realm="monero-rpc",nonce="jmk3hzH2xpPmUBSD0uy+uQ==",stale=false`)
+
+		d := digestAuthParams(res2.Result())
+		if assert.NotEmpty(t, d) {
+			assert.Equal(t, "jmk3hzH2xpPmUBSD0uy+uQ==", d["nonce"])
+		}
+	}
+}
+
 func TestRandomKey(t *testing.T) {
 	assert.NotPanics(t, func() { randomKey() })
 
 	k := randomKey()
-	assert.Len(t, k, 12, "Key length is incorrect.")
-
-	d, err := base64.StdEncoding.DecodeString(k)
-	if assert.NoError(t, err, "Key encode is incorrect.") {
-		assert.Len(t, d, 8, "Key bytes length is incorrect.")
+	if assert.Len(t, k, 12, "Key length is incorrect.") {
+		d, err := base64.StdEncoding.DecodeString(k)
+		if assert.NoError(t, err, "Key encode is incorrect.") {
+			assert.Len(t, d, 8, "Key bytes length is incorrect.")
+		}
 	}
 }
 
 func TestH(t *testing.T) {
-	assert.NotPanics(t, func() { h("") })
+	assert.NotPanics(t, func() { h("1234567890") })
 	assert.Equal(t, h("1234567890"), "e807f1fcf82d132f9bb018ca6738a19f", "MD5 hash is incorrect.")
 }
 
@@ -38,6 +52,9 @@ func TestRequest(t *testing.T) {
 		}
 	}))
 	defer ts.Close()
+
+	_, err := request(http.MethodPost, "", nil, "username", "password")
+	assert.Error(t, err)
 
 	res, err := request(http.MethodPost, ts.URL, nil, "username", "password")
 	if assert.NoError(t, err) {
