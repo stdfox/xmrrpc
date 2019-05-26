@@ -12,8 +12,9 @@ func TestRandomKey(t *testing.T) {
 	assert.Len(t, k, 12, "Key length is incorrect.")
 
 	d, err := base64.StdEncoding.DecodeString(k)
-	assert.NoError(t, err, "Key encode is incorrect.")
-	assert.Len(t, d, 8, "Key bytes length is incorrect.")
+	if assert.NoError(t, err, "Key encode is incorrect.") {
+		assert.Len(t, d, 8, "Key bytes length is incorrect.")
+	}
 }
 
 func TestH(t *testing.T) {
