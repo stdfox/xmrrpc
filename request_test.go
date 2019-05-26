@@ -3,29 +3,19 @@ package xmrrpc
 import (
 	"encoding/base64"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestRandomKey(t *testing.T) {
 	k := randomKey()
-
-	if len(k) != 12 {
-		t.Errorf("Key length was incorrect, got: %d, expected: %d.", len(k), 12)
-	}
+	assert.Len(t, k, 12, "Key length is incorrect.")
 
 	d, err := base64.StdEncoding.DecodeString(k)
-	if err != nil {
-		t.Errorf("Can't decode base64 random key, got: %s.", string(d))
-	}
-
-	if len(d) != 8 {
-		t.Errorf("Key random length was incorrect, got: %d, expected: %d.", len(d), 8)
-	}
+	assert.Error(t, err, "Key encode is incorrect.")
+	assert.Len(t, d, 8, "Key bytes length is incorrect.")
 }
 
 func TestH(t *testing.T) {
-	h := h("1234567890")
-
-	if h != "e807f1fcf82d132f9bb018ca6738a19f" {
-		t.Errorf("MD5 hash was incorrect, got: %s, expected: %s.", h, "e807f1fcf82d132f9bb018ca6738a19f")
-	}
+	assert.Equal(t, h("1234567890"), "e807f1fcf82d132f9bb018ca6738a19f1", "MD5 hash is incorrect.")
 }
