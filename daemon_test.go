@@ -1,7 +1,7 @@
 package xmrrpc
 
 import (
-	"fmt"
+	"io"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -11,7 +11,8 @@ import (
 
 func TestGetBlockCount(t *testing.T) {
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintln(w, `{
+		w.Header().Set("Content-Type", "application/json")
+		io.WriteString(w, `{
 			"id": 0,
 			"jsonrpc": "2.0",
 			"result": {
@@ -30,7 +31,8 @@ func TestGetBlockCount(t *testing.T) {
 
 func TestOnGetBlockHash(t *testing.T) {
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintln(w, `{
+		w.Header().Set("Content-Type", "application/json")
+		io.WriteString(w, `{
 			"id": 0,
 			"jsonrpc": "2.0",
 			"result": "e22cf75f39ae720e8b71b3d120a5ac03f0db50bba6379e2850975b4859190bc6"
@@ -46,7 +48,8 @@ func TestOnGetBlockHash(t *testing.T) {
 
 func TestGetBlockTemplate(t *testing.T) {
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintln(w, `{
+		w.Header().Set("Content-Type", "application/json")
+		io.WriteString(w, `{
 			"id": 0,
 			"jsonrpc": "2.0",
 			"result": {
@@ -72,7 +75,8 @@ func TestGetBlockTemplate(t *testing.T) {
 
 func TestSubmitBlock(t *testing.T) {
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintln(w, `{
+		w.Header().Set("Content-Type", "application/json")
+		io.WriteString(w, `{
 			"id": 0,
 			"jsonrpc": "2.0",
 			"error": {
@@ -91,7 +95,8 @@ func TestSubmitBlock(t *testing.T) {
 
 func TestGetLastBlockHeader(t *testing.T) {
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintln(w, `{
+		w.Header().Set("Content-Type", "application/json")
+		io.WriteString(w, `{
 			"id": 0,
 			"jsonrpc": "2.0",
 			"result": {
