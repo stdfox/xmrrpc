@@ -8,6 +8,8 @@ import (
 )
 
 func TestRandomKey(t *testing.T) {
+	assert.NotPanics(t, func() { randomKey() })
+
 	k := randomKey()
 	assert.Len(t, k, 12, "Key length is incorrect.")
 
@@ -18,5 +20,6 @@ func TestRandomKey(t *testing.T) {
 }
 
 func TestH(t *testing.T) {
+	assert.NotPanics(t, func() { h("") })
 	assert.Equal(t, h("1234567890"), "e807f1fcf82d132f9bb018ca6738a19f", "MD5 hash is incorrect.")
 }
