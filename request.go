@@ -34,11 +34,9 @@ func digestAuthParams(response *http.Response) map[string]string {
 }
 
 func randomKey() string {
-	rand.Seed(time.Now().UnixNano())
-
 	k := make([]byte, 8)
 	if _, err := rand.Read(k); err != nil {
-		panic("rand.Read() failed")
+		panic(err)
 	}
 
 	return base64.StdEncoding.EncodeToString(k)
@@ -47,13 +45,15 @@ func randomKey() string {
 func h(s string) string {
 	digest := md5.New()
 	if _, err := digest.Write([]byte(s)); err != nil {
-		panic("digest.Write() failed")
+		panic(err)
 	}
 
 	return hex.EncodeToString(digest.Sum(nil))
 }
 
 func request(method string, url string, body []byte, username string, password string) (*http.Response, error) {
+	rand.Seed(time.Now().UnixNano())
+
 	req1, err := http.NewRequest(method, url, bytes.NewReader(body))
 	if err != nil {
 		return nil, err
