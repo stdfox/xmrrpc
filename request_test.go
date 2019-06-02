@@ -50,7 +50,7 @@ func (s *requestTestSuite) TestRandomKey() {
 
 func (s *requestTestSuite) TestH() {
 	if assert.NotPanics(s.T(), func() { h("1234567890") }) {
-		assert.Equal(s.T(), h("1234567890"), "e807f1fcf82d132f9bb018ca6738a19f", "MD5 hash is incorrect.")
+		assert.Equal(s.T(), "e807f1fcf82d132f9bb018ca6738a19f", h("1234567890"), "MD5 hash is incorrect.")
 	}
 }
 
